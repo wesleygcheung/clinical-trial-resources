@@ -1,0 +1,153 @@
+{% extends "layout.html" %}
+{% block header %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='enrollforecast.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js" crossorigin="anonymous"></script>
+{% endblock header %}    
+{% block content2 %}
+<div class="main-grid">
+    <div class="main-section1">
+        <h2>Enrollment Forecast</h2>
+        Enter in countries or sites into the table below along with enrollment rates in order to view metrics and forecast when the target enrollment will be met.
+    </div>
+    <div class="main-section2">
+        <form class="" id="enrollform" method="POST" action="">
+            <legend class="mb-4">
+                <hr class="blog-line">
+                <h2 class="header5">Enrollment Parameters</h2>
+            </legend>
+            <div class="form-group">
+                <label class="form-control-label form-css" for="targetenrollment">Target Enrollment:</label>
+                <input class="form-control form-control-sm" id="targetenrollment" name="targetenrollment" required step="1" min="1" type="number" value="" onchange="minCurrentEnroll(this.value)">
+            </div>
+            <div class="form-group">
+                <label class="form-control-label form-css" for="currentenrollment">Current Enrollment:</label>
+                <input class="form-control form-control-sm" id="currentenrollment" name="currentenrollment" step="1" min="0" type="number" value="">
+            </div>
+            <table border="1" style="width: 100%;" id="enrolltable">
+                <colgroup>
+                    <col span="1" style="width: 20%;">
+                    <col span="1" style="width: 20%;">
+                    <col span="1" style="width: 20%;">
+                    <col span="1" style="width: 20%;">
+                    <col span="1" style="width: 20%;">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Country</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Screen Fail %</th>
+                        <th>Enrollment Rate</th>
+                    </tr>
+                </thead>
+                <tbody id="tablebody">
+                    <tr id="row-1">
+                        <td>
+                            <select class="form-control form-control-sm country" id="country-1" name="country-1" required>
+                                <option value="USA">USA</option>
+                                <option value="Canada">Canada</option>
+                                <option value="India">India</option>
+                                <option value="U.K.">U.K.</option>
+                                <option value="Spain">Spain</option>
+                                <option value="France">France</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input class="form-control form-control-sm" id="startdate-1" name="startdate-1" onchange="minEndDate(this.id)" required type="month" value="">
+                        </td>
+                        <td>
+                            <input class="form-control form-control-sm" id="enddate-1" name="enddate-1" type="month" value="">
+                        </td>
+                        <td>
+                            <input class="form-control form-control-sm" id="sfrate-1" min="0" name="sfrate-1" required step="0.1" type="number" value="">
+                        </td>
+                        <td>
+                            <input class="form-control form-control-sm" id="enrollmentrate-1" min="0" name="enrollmentrate-1" required step="0.01" type="number" value="">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="button" onclick="addRow()">Add Row</btn>
+            <button type="button" onclick="removeRow()">Remove Row</btn>
+        </form>
+    </div>
+    <div class="main-section3">
+        <button type="button" onclick="compileData()">Click to Run</button>
+    </div>
+</div>
+<script type=text/javascript>
+    $SCRIPT_ROOT = {{ request.script_root|tojson }};
+  </script>
+<script>
+    $("#enrollform").validate();
+    function minCurrentEnroll(targetEnrollment){
+        if ($('#currentenrollment').val() > targetEnrollment){
+            $('#currentenrollment').val("");
+        }
+        $('#currentenrollment').attr("max", targetEnrollment);
+    };
+    function minEndDate(startDate){
+        var row = startDate.split("-")[1];
+        var startDate = $('#'+startDate).val();
+        if ($("[id='enddate-"+String(row)+"'").val() < startDate){
+            $("[id='enddate-"+String(row)+"'").val("");
+        };
+        $("[id='enddate-"+String(row)+"'").attr("min", startDate);
+    };
+    function addRow(){
+        var rows = $('#enrolltable tr').length;
+        $('#tablebody').append(`
+            <tr id="row-`+String(rows)+`">
+                <td>
+                    <select class="form-control form-control-sm country" id="country-`+String(rows)+`" name="country-`+String(rows)+`" required>
+                        <option value="USA">USA</option>
+                        <option value="Canada">Canada</option>
+                        <option value="India">India</option>
+                        <option value="U.K.">U.K.</option>
+                        <option value="Spain">Spain</option>
+                        <option value="France">France</option>
+                    </select>
+                </td>
+                <td>
+                    <input class="form-control form-control-sm" id="startdate-`+String(rows)+`" name="startdate-`+String(rows)+`" onchange="minEndDate(this.id)" required type="month" value="">
+                </td>
+                <td>
+                    <input class="form-control form-control-sm" id="enddate-`+String(rows)+`" name="enddate-`+String(rows)+`" type="month" value="">
+                </td>
+                <td>
+                    <input class="form-control form-control-sm" id="sfrate-`+String(rows)+`" min="0" name="sfrate-`+String(rows)+`" required step="0.1" type="number" value="">
+                </td>
+                <td>
+                    <input class="form-control form-control-sm" id="enrollmentrate-`+String(rows)+`" min="0" name="enrollmentrate-`+String(rows)+`" required step="0.01" type="number" value="">
+                </td>
+            </tr>`
+        );
+    };
+    function removeRow(){
+        var table = document.getElementById('enrolltable');
+        var rowCount = table.rows.length;
+        if (rowCount > 2) {
+            table.deleteRow(rowCount-1);
+        }
+    }
+    function compileData(){
+        if ($("#enrollform").valid()){
+            var rows = $('#enrolltable tr').length-1;
+            var columns = ['country','startdate','enddate','sfrate','enrollmentrate']
+            var datadict = {'country': [],'startdate': [], 'enddate': [], 'sfrate': [], 'enrollmentrate': []};
+            for (column of columns) {
+                for (let step = 1; step<=rows; step++){
+                    datadict[column].push($("[id='"+column+"-"+String(step)+"'").val());
+                }
+            }
+            $.ajax({
+                url: "/API/enrollment",
+                type: "POST",
+                data: JSON.stringify(datadict),
+                contentType: "application/json; charset=utf-8",
+                success: function(data) { console.log(data); }
+            });
+        };
+    };
+</script>
+{% endblock content2 %}

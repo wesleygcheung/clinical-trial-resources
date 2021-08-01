@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='layout.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,700|Montserrat:300" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/4b23b73a78.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    {% if title %}
+        <title>CTR - {{ title }}</title>
+    {% else %}
+        <title>Clinical Trial Resources</title>
+    {% endif %}
+    {% block header %}{% endblock header%}
+</head>
+<body>
+<div class="layout-grid">
+    <header class="site-header">
+        <nav class="navbar navbar-expand-md navbar-light bg-steel smart-scroll">
+            <div class="container">
+                <a class="navbar-brand mr-4" href="{{ url_for('home') }}">
+                    <div class="logo">
+                        <h4 class="navheader2" id="navheader1" style="padding-top: 7px;">CTR</h4>
+                    </div></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse nav-rightalign" id="navbarToggle">
+                    <div class="navbar-nav ml-auto dropdown-menu-right">
+                        <a class="nav-item nav-link nav-main-item" href="{{ url_for('home') }}" id="home"><span class="navheader" id="homespan">Home</span></a>
+                        <a class="nav-item nav-link nav-main-item" href="{{ url_for('enrollment') }}" id="enroll"><span class="navheader" id="enrollspan">Enrollment Forecast</span></a>
+                    </div>
+                </div>
+
+            </div>
+        </nav>
+    </header>
+    {% block content2 %}
+    {% endblock %}
+    <footer class="footer">
+        <div class="footer-section1">
+            <div style="margin-bottom: 0.75em;">
+                <span class="navfooter">About</span>
+                <span class="footer-spacing"> • </span>
+                <span class="navfooter">Terms of Use</span>
+                <span class="footer-spacing"> • </span>
+                <span class="navfooter">Privacy Policy</span>
+            </div>
+            <span style="color:#9e9e9e;font-size: 0.75rem;">© 2021 Wesley Cheung</span>
+            
+        </div>
+        <div class="footer-section2">
+            <a href="https://github.com/wesleygcheung/" class="socials" target="_blank" rel="noreferrer noopener"><i class="fab fa-github fa-lg social-icons"></i></a>
+            <a href="https://www.facebook.com/wgcheung" class="socials" target="_blank" rel="noreferrer noopener"><i class="fab fa-facebook-square fa-lg social-icons"></i></a>
+            <a href="https://www.instagram.com/wesley.cheung/" class="socials" target="_blank" rel="noreferrer noopener"><i class="fab fa-instagram fa-lg social-icons"></i></a>
+            <a href="https://www.linkedin.com/in/wgcheung/" class="socials" target="_blank" rel="noreferrer noopener"><i class="fab fa-linkedin fa-lg social-icons"></i></a>
+            <a href="mailto: wesley.g.cheung@gmail.com" class="socials" target="_blank" rel="noreferrer noopener"><i class="fas fa-envelope fa-lg social-icons"></i></a>
+        </div>
+            <div class="footer-section3 logo navbar-brand">
+                <a href="/">
+                <h4 class="navheader2">CTR</h4>
+                </a>
+            </div>
+    </footer>
+</div>
+    <script>
+        var navlinks = document.getElementsByClassName("nav-main-item");
+        for (link of navlinks) {
+            if (link.getAttribute("href") == window.location.pathname) {
+                var spanid = link.id+"span";
+                document.getElementById(spanid).style.color = '#6940c9';
+            }
+        };
+
+        if ($('.smart-scroll').length > 0) { // check if element exists
+            var last_scroll_top = 0;
+            $(window).on('scroll', function() {
+                scroll_top = $(this).scrollTop();
+                if(scroll_top < last_scroll_top) {
+                    $('.smart-scroll').removeClass('scrolled-down').addClass('scrolled-up');
+                }
+                else {
+                    $('.smart-scroll').removeClass('scrolled-up').addClass('scrolled-down');
+                }
+                last_scroll_top = scroll_top;
+            });
+        }
+    </script>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>

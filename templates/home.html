@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block header %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='home.css') }}">
+    
+{% endblock header %}    
+{% block content2 %}
+<div class="main-grid">
+    <div class="main-section1">
+        <h1>Clinical Trial Resources</h1>
+    </div>
+    <div class="main-section2">
+        <h2>Projects</h2>
+        <a href="{{ url_for('enrollment') }}"><h3>Enrollment Forecast</h3></a>
+    </div>
+</div>
+{% endblock content2 %}
