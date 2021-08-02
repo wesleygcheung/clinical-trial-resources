@@ -35,7 +35,7 @@
                     <tr>
                         <th>Country</th>
                         <th>Start Date</th>
-                        <th>End Date</th>
+                        <th>Stop Date</th>
                         <th>Screen Fail %</th>
                         <th>Enrollment Rate</th>
                     </tr>
@@ -44,12 +44,18 @@
                     <tr id="row-1">
                         <td>
                             <select class="form-control form-control-sm country" id="country-1" name="country-1" required>
-                                <option value="USA">USA</option>
-                                <option value="Canada">Canada</option>
+                                <option value="Australia">Australia</option>
+                                <option value="Austria">Austria</option>
+                                <option value="Germany">Germany</option>
                                 <option value="India">India</option>
-                                <option value="U.K.">U.K.</option>
-                                <option value="Spain">Spain</option>
-                                <option value="France">France</option>
+                                <option value="New Zealand">New Zealand</option>
+                                <option value="Poland">Poland</option>
+                                <option value="Romania">Romania</option>
+                                <option value="Russia">Russia</option>
+                                <option value="Taiwan">Taiwan</option>
+                                <option value="Ukraine">Ukraine</option>
+                                <option value="United Kingdom">United Kingdom</option>
+                                <option value="United States of America">United States of America</option>
                             </select>
                         </td>
                         <td>
@@ -59,10 +65,10 @@
                             <input class="form-control form-control-sm" id="enddate-1" name="enddate-1" type="month" value="">
                         </td>
                         <td>
-                            <input class="form-control form-control-sm" id="sfrate-1" min="0" name="sfrate-1" required step="0.1" type="number" value="">
+                            <input class="form-control form-control-sm" id="sfrate-1" min="0" max="1" name="sfrate-1" required step="0.0001" type="number" value="">
                         </td>
                         <td>
-                            <input class="form-control form-control-sm" id="enrollmentrate-1" min="0" name="enrollmentrate-1" required step="0.01" type="number" value="">
+                            <input class="form-control form-control-sm" id="enrollmentrate-1" min="0" name="enrollmentrate-1" required step="0.0001" type="number" value="">
                         </td>
                     </tr>
                 </tbody>
@@ -100,12 +106,18 @@
             <tr id="row-`+String(rows)+`">
                 <td>
                     <select class="form-control form-control-sm country" id="country-`+String(rows)+`" name="country-`+String(rows)+`" required>
-                        <option value="USA">USA</option>
-                        <option value="Canada">Canada</option>
-                        <option value="India">India</option>
-                        <option value="U.K.">U.K.</option>
-                        <option value="Spain">Spain</option>
-                        <option value="France">France</option>
+                        <option value="Australia">Australia</option>
+                                <option value="Austria">Austria</option>
+                                <option value="Germany">Germany</option>
+                                <option value="India">India</option>
+                                <option value="New Zealand">New Zealand</option>
+                                <option value="Poland">Poland</option>
+                                <option value="Romania">Romania</option>
+                                <option value="Russia">Russia</option>
+                                <option value="Taiwan">Taiwan</option>
+                                <option value="Ukraine">Ukraine</option>
+                                <option value="United Kingdom">United Kingdom</option>
+                                <option value="United States of America">United States of America</option>
                     </select>
                 </td>
                 <td>
@@ -115,10 +127,10 @@
                     <input class="form-control form-control-sm" id="enddate-`+String(rows)+`" name="enddate-`+String(rows)+`" type="month" value="">
                 </td>
                 <td>
-                    <input class="form-control form-control-sm" id="sfrate-`+String(rows)+`" min="0" name="sfrate-`+String(rows)+`" required step="0.1" type="number" value="">
+                    <input class="form-control form-control-sm" id="sfrate-`+String(rows)+`" min="0" max ="1" name="sfrate-`+String(rows)+`" required step="0.0001" type="number" value="">
                 </td>
                 <td>
-                    <input class="form-control form-control-sm" id="enrollmentrate-`+String(rows)+`" min="0" name="enrollmentrate-`+String(rows)+`" required step="0.01" type="number" value="">
+                    <input class="form-control form-control-sm" id="enrollmentrate-`+String(rows)+`" min="0" name="enrollmentrate-`+String(rows)+`" required step="0.0001" type="number" value="">
                 </td>
             </tr>`
         );
@@ -140,10 +152,12 @@
                     datadict[column].push($("[id='"+column+"-"+String(step)+"'").val());
                 }
             }
+            var datadict = {'Country': datadict['country'],'Start Date': datadict['startdate'], 'Stop Date': datadict['enddate'], "Screen Fail Rate": datadict['sfrate'], 'Enrollment Rate': datadict['enrollmentrate']};
+            var finaldict = {'Target Enrollment': $('#targetenrollment').val(), 'Current Enrollment': $('#currentenrollment').val(), 'tableData': datadict}
             $.ajax({
                 url: "/API/enrollment",
                 type: "POST",
-                data: JSON.stringify(datadict),
+                data: JSON.stringify(finaldict),
                 contentType: "application/json; charset=utf-8",
                 success: function(data) { console.log(data); }
             });
