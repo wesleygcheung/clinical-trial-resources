@@ -3,8 +3,6 @@ import pandas as pd
 import numpy as np
 import secrets
 import math
-from datetime import datetime
-from datetime import timedelta
 from dateutil.relativedelta import *
 from functools import reduce
 
@@ -113,9 +111,7 @@ def api_enrollment():
     dfTotalAgg = dfTotal.groupby(['Country','Date']).agg({'Screeners': ['sum'], 'Rand': ['sum']})
     dfTotalAgg.columns = ['Screeners','Rand']
     dfTotalAgg = dfTotalAgg.reset_index()
-    dfTotalAgg['Date'] = pd.to_datetime(dfTotalAgg['Date']).apply(lambda x: x.date())
-    dfTotalAgg = dfTotalAgg.values.tolist()
-
+    dfTotalAgg['Date'] = dfTotalAgg['Date'].dt.strftime('%Y-%m-%d')
     dfMonths = dfTotal.groupby('Country')['Date'].nunique()
     dfMean = dfTotal.groupby(['Country'], as_index=False).mean()
     dfMean['Screen Fail Rate'] = 1 - dfMean['Rand']
@@ -123,22 +119,32 @@ def api_enrollment():
     dfSum = dfTotal.groupby(['Country'], as_index=False).sum()
     dfFinal = reduce(lambda left, right: pd.merge(left, right, on='Country'), [dfSum, dfMean, dfMonths])
     dfFinal['Enrollment Rate'] = dfFinal.apply(lambda x: round(x['Rand']/x['Date'],2), axis=1)
+    dfFinal['Screen Fail Rate'] = dfFinal['Screen Fail Rate'].apply(lambda x: round(x*100,1))
     dfFinal.drop(columns=['Date'],inplace=True)
-    TotalSF = (1-dfFinal['Rand'].sum()/dfFinal['Screeners'].sum())*100
-    TotalRand = dfFinal['Rand'].sum()
-    TotalScreen = dfFinal['Screeners'].sum()
+    plotlyData = {}
+    plotlyData['ScreeningPlot'] = {}
+    plotlyData['EnrolledPlot'] = {}
+    plotlyData['Countries'] = dfFinal['Country'].tolist()
+    dfAllMonths = pd.DataFrame(dfTotalAgg['Date'].unique(), columns=['Date'])
+    for country in plotlyData['Countries']:
+        dfCountry = dfTotalAgg.loc[dfTotalAgg['Country']==country, ['Date','Screeners','Rand']]
+        dfCountryMerge = dfAllMonths.merge(dfCountry,how='left',on='Date').sort_values(by=['Date'])
+        dfCountryMerge.fillna(0,inplace=True)
+        countryScreeners = dfCountryMerge['Screeners'].cumsum().tolist()
+        countryEnrolled = dfCountryMerge['Rand'].cumsum().tolist()
+        countryDates = dfCountryMerge['Date'].tolist()
+        plotlyData['ScreeningPlot'][country] = {'Dates': countryDates, 'Screeners': countryScreeners} 
+        plotlyData['EnrolledPlot'][country] = {'Dates': countryDates, 'Enrolled': countryEnrolled}
+    for column in ['Screeners','Rand','Screen Fail Rate','Enrollment Rate']:
+        plotlyData[column] = dfFinal[['Country',column]].sort_values(by=[column], ascending=True).values.tolist()
 
-    TotalMinDate = dfTotal['Date'].min()
-    TotalMinDate = TotalMinDate.strftime('%d-%b-%Y')
-    TotalMaxDate = dfTotal['Date'].max()
-    TotalMaxDate = TotalMaxDate.strftime('%d-%b-%Y')
-    print(dfFinal)
-    print(f"Start Date: {TotalMinDate}")
-    print(f"Stop Date: {TotalMaxDate}")
-    print(f"Randomized: {TotalRand}")
-    print(f"Screened: {TotalScreen}")
-    print(f"Screen Failure Rate: {TotalSF:.2f}%")
-    return jsonify(result="success!")
+    plotlyData['Global SF Rate'] = round(float((1-dfFinal['Rand'].sum()/dfFinal['Screeners'].sum())*100),1)
+    plotlyData['Global Randomized'] = int(dfFinal['Rand'].sum())
+    plotlyData['Global Screened'] = int(dfFinal['Screeners'].sum())
+    plotlyData['Global Start Date'] = dfTotal['Date'].min().strftime('%d-%b-%Y')
+    plotlyData['Global Stop Date'] = dfTotal['Date'].max().strftime('%d-%b-%Y')
+    plotlyData['Global Enrollment Rate'] = round(plotlyData['Global Randomized'] / int(dfMonths.sum()),2)
+    return jsonify(plotlyData)
 
 if __name__ == '__main__':
     app.run(debug=True)

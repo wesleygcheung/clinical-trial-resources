@@ -1,5 +1,8 @@
 :root {
     --gradient: linear-gradient(45deg, #794ac5, #da56b2, #ff6f91, #e27c56);
+    --button-color: #762acc;
+    --button-color-hover: #671eb9;
+    --header-line-color: #5519c5;
 }
 body {
     background-color:#f7f7f7;
@@ -23,6 +26,14 @@ a:active {
 }
 h1 {
     font-size: 80px;
+}
+.header-line{
+    border:0;
+    height:2px;
+    margin-left: 0;
+    background:var(--header-line-color);
+    border-radius: 2px;
+    width: 6rem;
 }
 .layout-grid{
     height: 100vh;

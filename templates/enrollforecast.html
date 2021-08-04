@@ -2,17 +2,19 @@
 {% block header %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='enrollforecast.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 {% endblock header %}    
 {% block content2 %}
 <div class="main-grid">
     <div class="main-section1">
-        <h2>Enrollment Forecast</h2>
+        <hr class="header-line">
+        <h2><b>Enrollment Forecast</b></h2>
         Enter in countries or sites into the table below along with enrollment rates in order to view metrics and forecast when the target enrollment will be met.
     </div>
     <div class="main-section2">
         <form class="" id="enrollform" method="POST" action="">
             <legend class="mb-4">
-                <hr class="blog-line">
+                <hr class="header-line">
                 <h2 class="header5">Enrollment Parameters</h2>
             </legend>
             <div class="form-group">
@@ -68,10 +70,92 @@
             </table>
             <button type="button" onclick="addRow()">Add Row</btn>
             <button type="button" onclick="removeRow()">Remove Row</btn>
+            <button type="button" onclick="compileData()">Click to Run</button>
         </form>
     </div>
     <div class="main-section3">
-        <button type="button" onclick="compileData()">Click to Run</button>
+        <div class="dashboard-header">
+
+            <h2><b>Enrollment Forecast Results</b></h2>
+        </div>
+        <div class="dashboard-bans-header">
+            <hr class="header-line">
+            <h3>Global Metrics</h3>
+        </div>
+        <div class="dashboard-bans">
+            <div class="bans-card">
+                <div class="bans-card-data">
+                    <span id="globalStart"></span>
+                </div>
+                Start Date
+            </div>
+            <div class="bans-card">
+                <div class="bans-card-data">
+                    <span id="globalStop"></span>
+                </div>
+                Stop Date
+            </div>
+            <div class="bans-card">
+                <div class="bans-card-data">
+                    <span id="globalSFRate"></span>
+                </div>
+                Screen Fail %
+            </div>
+            <div class="bans-card">
+                <div class="bans-card-data">
+                    <span id="globalScreened"></span>
+                </div>
+                Screened
+            </div>
+            <div class="bans-card">
+                <div class="bans-card-data">
+                    <span id="globalEnrolled"></span>
+                </div>
+                Enrolled
+            </div>
+            <div class="bans-card">
+                <div class="bans-card-data">
+                    <span id="globalEnrollRate"></span>
+                </div>
+                Enrollment Rate
+            </div>
+        </div>
+        <div class="dashboard-screeningPlot-container">
+            <hr class="header-line">
+            <h3>Forecasted Screening</h3>
+            <div class="dashboard-areaPlot" id="screeningPlot">
+            </div>
+        </div>
+        <div class="dashboard-enrollPlot-container">
+            <hr class="header-line">
+            <h3>Forecasted Enrollment</h3>
+            <div class="dashboard-areaPlot" id="enrollPlot">
+            </div>
+        </div>
+        <div class="dashboard-countryScreening">
+            <div class="dashboard-countryScreeningPlot" style="float: left;">
+                <hr class="header-line">
+                <h3 style="text-align: left">Total Screeners by Country</h3>
+                <div id="countryScreenPlot"></div>
+            </div>
+            <div class="dashboard-countryScreeningPlot" style="float: right;">
+                <hr class="header-line">
+                <h3 style="text-align: left">Screen Failure % by Country</h3>
+                <div id="countryScreenFailPlot"></div>
+            </div>
+        </div>
+        <div class="dashboard-countryEnroll">
+            <div class="dashboard-countryScreeningPlot" style="float: left;">
+                <hr class="header-line">
+                <h3 style="text-align: left">Total Enrolled by Country</h3>
+                <div id="countryEnrolledPlot"></div>
+            </div>
+            <div class="dashboard-countryScreeningPlot" style="float: right;">
+                <hr class="header-line">
+                <h3 style="text-align: left">Enrollment Rate by Country</h3>
+                <div id="countryEnrolledRatePlot"></div>
+            </div>
+        </div>
     </div>
 </div>
 <script type=text/javascript src="{{ url_for('static', filename='bundle.min.js') }}"></script>
@@ -323,7 +407,6 @@
         placeholder: 'Australia',
         autocomplete: true,
         id: 1,
-        onChange: value => { multiselectvalues(value); }
     });
     };
     function removeRow(){
@@ -358,7 +441,6 @@
             for (i of Object.keys(autocompleteDict)){
                 datadict['country'].push(autocompleteDict[i]['_config']['value']);
             };
-            console.log(datadict);
             var datadict = {'Country': datadict['country'],'Start Date': datadict['startdate'], 'Stop Date': datadict['enddate'], "Screen Fail Rate": datadict['sfrate'], 'Enrollment Rate': datadict['enrollmentrate']};
             var finaldict = {'Target Enrollment': $('#targetenrollment').val(), 'Current Enrollment': $('#currentenrollment').val(), 'tableData': datadict}
             $.ajax({
@@ -366,7 +448,49 @@
                 type: "POST",
                 data: JSON.stringify(finaldict),
                 contentType: "application/json; charset=utf-8",
-                success: function(data) { console.log(data); }
+                success: function(data) { 
+                    console.log(data);
+                    $('#globalStart').text(data['Global Start Date']);
+                    $('#globalStop').text(data['Global Stop Date']);
+                    $('#globalSFRate').text(String(data['Global SF Rate'])+'%');
+                    $('#globalScreened').text(data['Global Screened']);
+                    if ($('#currentenrollment').val()=='' || $('#currentenrollment').val()==0){
+                        $('#globalEnrolled').text(String(data['Global Randomized'])+'/'+String($('#targetenrollment').val()));
+                    } else{
+                        $('#globalEnrolled').text(String(parseInt(data['Global Randomized'])+parseInt($('#currentenrollment').val()))+'/'+String($('#targetenrollment').val()));
+                    }                    
+                    $('#globalEnrollRate').text(data['Global Enrollment Rate']);
+                    screeningTraces = [];
+                    enrollTraces = [];
+                    for (country of Object.keys(data['ScreeningPlot'])){
+
+                        var screenTrace = {x: data['ScreeningPlot'][country]['Dates'], y: data['ScreeningPlot'][country]['Screeners'], name: country, stackgroup: 'one'};
+                        screeningTraces.push(screenTrace);
+                        var enrollTrace = {x: data['EnrolledPlot'][country]['Dates'], y: data['EnrolledPlot'][country]['Enrolled'], name: country, stackgroup: 'one'};
+                        enrollTraces.push(enrollTrace);
+                        Plotly.react('screeningPlot',screeningTraces, overTimePlotLayout);
+                        Plotly.react('enrollPlot',enrollTraces, overTimePlotLayout);
+                    };
+                    countryScreenFailPlotData[0]['x'] = [];
+                    countryScreenFailPlotData[0]['y'] = [];
+                    countryScreenPlotData[0]['x'] = [];
+                    countryScreenPlotData[0]['y'] = [];
+                    countryEnrolledPlotData[0]['x'] = [];
+                    countryEnrolledPlotData[0]['y'] = [];
+                    countryEnrollRatePlotData[0]['x'] = [];
+                    countryEnrollRatePlotData[0]['y'] = [];
+                    var horizBarPlots = {'Screeners': countryScreenPlotData[0], 'Screen Fail Rate': countryScreenFailPlotData[0], 'Rand': countryEnrolledPlotData[0], 'Enrollment Rate': countryEnrollRatePlotData[0]};
+                    for (plot of Object.keys(horizBarPlots)){
+                        for (country in data[plot]){
+                            horizBarPlots[plot]['x'].push(data[plot][country][1]);
+                            horizBarPlots[plot]['y'].push(data[plot][country][0]);
+                        };
+                    }
+                    Plotly.react('countryScreenPlot', countryScreenPlotData);
+                    Plotly.react('countryScreenFailPlot', countryScreenFailPlotData);
+                    Plotly.react('countryEnrolledPlot', countryEnrolledPlotData);
+                    Plotly.react('countryEnrolledRatePlot', countryEnrollRatePlotData);
+                }
             });
         };
     };
@@ -377,10 +501,48 @@
         placeholder: 'Australia',
         autocomplete: true,
         id: 1,
-        onChange: value => { multiselectvalues(value); }
     });
-    function multiselectvalues(value) {
-        console.log(value);
-      };
+
+
+    var overTimePlotLayout = {
+        showlegend: true,
+        legend: {"orientation": "h"}
+    };
+    var screeningTraces = [];
+
+    var enrollTraces = [];
+
+    Plotly.newPlot('screeningPlot', screeningTraces, overTimePlotLayout);
+    Plotly.newPlot('enrollPlot', enrollTraces, overTimePlotLayout);
+
+    var countryScreenPlotData = [{
+        type: 'bar',
+        x: [],
+        y: [],
+        orientation: 'h'
+    }];
+    var countryScreenFailPlotData = [{
+        type: 'bar',
+        x: [],
+        y: [],
+        orientation: 'h'
+    }];
+    var countryEnrollRatePlotData = [{
+        type: 'bar',
+        x: [],
+        y: [],
+        orientation: 'h'
+    }];
+    var countryEnrolledPlotData = [{
+        type: 'bar',
+        x: [],
+        y: [],
+        orientation: 'h'
+    }];
+    
+    Plotly.newPlot('countryScreenPlot', countryScreenPlotData);
+    Plotly.newPlot('countryScreenFailPlot', countryScreenFailPlotData);
+    Plotly.newPlot('countryEnrolledPlot', countryEnrolledPlotData);
+    Plotly.newPlot('countryEnrolledRatePlot', countryEnrollRatePlotData);
 </script>
 {% endblock content2 %}

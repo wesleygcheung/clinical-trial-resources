@@ -24,9 +24,64 @@ button:focus {
     grid-row: 2 / 2;
 }
 .main-section3{
+    grid-column: 1 / 11;
+    grid-row: 3 / 3;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: auto;
+    grid-auto-flow: row;
+    width: 100%;
+}
+.dashboard-header{
+    grid-column: 3 / 9;
+    grid-row: 1 / 1;
+    align-self: start;
+    justify-self: start;
+}
+.dashboard-bans-header{
+    grid-column: 3 / 9;
+    grid-row: 2 / 2;
+}
+.dashboard-bans{
     grid-column: 3 / 9;
     grid-row: 3 / 3;
+    align-self: start;
+    justify-self: center;
+    text-align: center;
 }
+.bans-card{
+    display: inline-block;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+.bans-card-data{
+    font-weight: bold;
+    font-size: 30px;
+    color: var(--button-color);
+}
+.dashboard-screeningPlot-container{
+    grid-column: 3 / 9;
+    grid-row: 4 / 4;
+}
+.dashboard-enrollPlot-container{
+    grid-column: 3 / 9;
+    grid-row: 5 / 5;
+}
+.dashboard-countryScreening{
+    grid-column: 3 / 9;
+    grid-row: 6 / 6;
+    text-align: center;
+}
+.dashboard-countryScreeningPlot{
+    display: inline-block;
+    width: 40%;
+}
+.dashboard-countryEnroll{
+    grid-column: 3 / 9;
+    grid-row: 7 / 7;
+    text-align: center;
+}
+
 .error {
     color: rgb(184, 0, 0);
     font-weight: bold;
