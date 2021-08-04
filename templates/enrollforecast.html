@@ -358,7 +358,12 @@
         {label: "Yemen",  value: "Yemen"}, 
         {label: "Zambia",  value: "Zambia"}, 
         {label: "Zimbabwe",  value: "Zimbabwe"}];
+
     var autocompleteDict = {};
+
+    var barcolorgradient = ['#061f68', 	'#0a236c', 	'#0d2770', 	'#112b74', 	'#142f78', 	'#17327c', 	'#1a3680', 	'#1d3a84', 	'#203e88', 	'#23428c', 	'#264790', 	'#294b94', 	'#2c4f97', 	'#2f539b', 	'#32579f', 	'#355ba3', 	'#385fa7', 	'#3b64ab', 	'#3e68af', 	'#416cb3', 	'#4470b7', 	'#4775bb', 	'#4b79be', 	'#4e7dc2', 	'#5182c6', 	'#5586ca', 	'#588ace', 	'#5c8fd2', 	'#5f93d5', 	'#6398d9', 	'#669cdd', 	'#6aa1e1', 	'#6ea5e5', 	'#71aae8', 	'#75aeec', 	'#79b3f0', 	'#7db7f4', 	'#81bcf7', 	'#85c0fb', 	'#89c5ff'];
+	var barcolorlist = [];
+
     $("#enrollform").validate();
     function minCurrentEnroll(targetEnrollment){
         if ($('#currentenrollment').val() > targetEnrollment){
@@ -471,25 +476,40 @@
                         Plotly.react('screeningPlot',screeningTraces, overTimePlotLayout);
                         Plotly.react('enrollPlot',enrollTraces, overTimePlotLayout);
                     };
-                    countryScreenFailPlotData[0]['x'] = [];
-                    countryScreenFailPlotData[0]['y'] = [];
-                    countryScreenPlotData[0]['x'] = [];
-                    countryScreenPlotData[0]['y'] = [];
-                    countryEnrolledPlotData[0]['x'] = [];
-                    countryEnrolledPlotData[0]['y'] = [];
-                    countryEnrollRatePlotData[0]['x'] = [];
-                    countryEnrollRatePlotData[0]['y'] = [];
-                    var horizBarPlots = {'Screeners': countryScreenPlotData[0], 'Screen Fail Rate': countryScreenFailPlotData[0], 'Rand': countryEnrolledPlotData[0], 'Enrollment Rate': countryEnrollRatePlotData[0]};
+
+                    var horizBarPlots = {'Screeners': [countryScreenPlotData[0],countryScreenPlotLayout], 'Screen Fail Rate': [countryScreenFailPlotData[0],countryScreenFailPlotLayout], 'Rand': [countryEnrolledPlotData[0],countryEnrolledPlotLayout], 'Enrollment Rate': [countryEnrollRatePlotData[0],countryEnrollRatePlotLayout]};
+                    for (dataset of Object.values(horizBarPlots)){
+                        dataset[0]['x'] = [];
+                        dataset[0]['y'] = [];
+                        dataset[0]['text'] = [];
+                    }
                     for (plot of Object.keys(horizBarPlots)){
                         for (country in data[plot]){
-                            horizBarPlots[plot]['x'].push(data[plot][country][1]);
-                            horizBarPlots[plot]['y'].push(data[plot][country][0]);
+                            horizBarPlots[plot][0]['x'].push(data[plot][country][1]);
+                            horizBarPlots[plot][0]['y'].push('<b>'+data[plot][country][0]+"</b>");
+                            if (plot == 'Screen Fail Rate'){
+                                horizBarPlots[plot][0]['text'].push('<b>'+String(data[plot][country][1])+'%</b>');
+                            } else{
+                                horizBarPlots[plot][0]['text'].push('<b>'+String(data[plot][country][1])+'</b>');
+                            };
                         };
+                        horizBarPlots[plot][1]['xaxis']['range'] = [0,(parseInt(data[plot][data[plot].length-1][1])*1.20)];
                     }
-                    Plotly.react('countryScreenPlot', countryScreenPlotData);
-                    Plotly.react('countryScreenFailPlot', countryScreenFailPlotData);
-                    Plotly.react('countryEnrolledPlot', countryEnrolledPlotData);
-                    Plotly.react('countryEnrolledRatePlot', countryEnrollRatePlotData);
+                    var countrylen = data['Countries'].length;
+                    var colorstep = Math.floor(40 / countrylen);
+                    for (i in data['Countries']) {
+                        barcolorlist.push(barcolorgradient[(i*colorstep)]);
+                    };
+                    barcolorlist.reverse();
+                    Plotly.react('countryScreenPlot', countryScreenPlotData, countryScreenPlotLayout, boxConfig, {staticPlot: true});
+                    Plotly.react('countryScreenFailPlot', countryScreenFailPlotData, countryScreenFailPlotLayout, boxConfig, {staticPlot: true});
+                    Plotly.react('countryEnrolledPlot', countryEnrolledPlotData, countryEnrolledPlotLayout, boxConfig, {staticPlot: true});
+                    Plotly.react('countryEnrolledRatePlot', countryEnrollRatePlotData, countryEnrollRatePlotLayout, boxConfig, {staticPlot: true});
+
+                    Plotly.react('countryScreenPlot', countryScreenPlotData, countryScreenPlotLayout, boxConfig, {staticPlot: true});
+                    Plotly.react('countryScreenFailPlot', countryScreenFailPlotData, countryScreenFailPlotLayout, boxConfig, {staticPlot: true});
+                    Plotly.react('countryEnrolledPlot', countryEnrolledPlotData, countryEnrolledPlotLayout, boxConfig, {staticPlot: true});
+                    Plotly.react('countryEnrolledRatePlot', countryEnrollRatePlotData, countryEnrollRatePlotLayout, boxConfig, {staticPlot: true});
                 }
             });
         };
@@ -503,46 +523,251 @@
         id: 1,
     });
 
+    var boxConfig = {responsive: true, displayModeBar: false};
 
     var overTimePlotLayout = {
         showlegend: true,
-        legend: {"orientation": "h"}
+        legend: {"orientation": "h"},
+        margin: {
+			r: 25,
+			t: 20,
+			b: 10,
+            l: 10,
+			pad: 0,	
+		},
+        xaxis: {
+            showgrid: false,
+            fixedrange: true,
+            automargin: true,
+        },
+        yaxis: {
+            side: 'right',
+            showgrid: false,
+            fixedrange: true,
+            automargin: true,
+        }
     };
     var screeningTraces = [];
 
     var enrollTraces = [];
 
-    Plotly.newPlot('screeningPlot', screeningTraces, overTimePlotLayout);
-    Plotly.newPlot('enrollPlot', enrollTraces, overTimePlotLayout);
+    Plotly.newPlot('screeningPlot', screeningTraces, overTimePlotLayout, boxConfig);
+    Plotly.newPlot('enrollPlot', enrollTraces, overTimePlotLayout, boxConfig);
 
     var countryScreenPlotData = [{
         type: 'bar',
         x: [],
         y: [],
-        orientation: 'h'
+        text: [],
+        textposition: 'outside',
+        hoverinfo: 'none',
+        orientation: 'h',
+        marker: {
+			color: barcolorlist,
+			line: {
+				width: 2,
+				color: barcolorlist,
+			},
+			opacity: 0.70,
+		},
     }];
+
     var countryScreenFailPlotData = [{
         type: 'bar',
         x: [],
         y: [],
-        orientation: 'h'
+        text: [],
+        orientation: 'h',
+        textposition: 'outside',
+        hoverinfo: 'none',
+        marker: {
+			color: barcolorlist,
+			line: {
+				width: 2,
+				color: barcolorlist,
+			},
+			opacity: 0.70,
+		},
     }];
     var countryEnrollRatePlotData = [{
         type: 'bar',
         x: [],
         y: [],
-        orientation: 'h'
+        text: [],
+        orientation: 'h',
+        textposition: 'outside',
+        hoverinfo: 'none',
+        marker: {
+			color: barcolorlist,
+			line: {
+				width: 2,
+				color: barcolorlist,
+			},
+			opacity: 0.70,
+		},
     }];
     var countryEnrolledPlotData = [{
         type: 'bar',
         x: [],
         y: [],
-        orientation: 'h'
+        text: [],
+        orientation: 'h',
+        textposition: 'outside',
+        hoverinfo: 'none',
+        marker: {
+			color: barcolorlist,
+			line: {
+				width: 2,
+				color: barcolorlist,
+			},
+			opacity: 0.70,
+		},
     }];
+    var countryScreenPlotLayout = {
+        autosize: true,
+        showlegend: false,
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        hovermode: false,
+        margin: {
+			r: 10,
+			t: 20,
+			b: 10,
+			pad: 0,	
+		},
+        font: {
+            family: 'Montserrat',
+            size: 12,
+            color: '#00000',
+        },
+		xaxis: {
+            autorange: false,
+			range: [],
+			tick0: 0,
+			dtick: 1,
+            showgrid: false,
+            showline: false,
+            showticklabels: false,
+		},
+		yaxis: {
+			automargin: true,
+			ticksuffix: ' ',
+            showgrid: false,
+            showline: false,
+		},
+		dragmode: false,
+		clickmode: 'none',
+        };
+
+        var countryScreenFailPlotLayout = {
+        autosize: true,
+        showlegend: false,
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        hovermode: false,
+        margin: {
+			r: 10,
+			t: 20,
+			b: 10,
+			pad: 0,	
+		},
+        font: {
+            family: 'Montserrat',
+            size: 12,
+            color: '#00000',
+        },
+		xaxis: {
+            autorange: false,
+			range: [],
+			tick0: 0,
+			dtick: 1,
+            showgrid: false,
+            showline: false,
+            showticklabels: false,
+		},
+		yaxis: {
+			automargin: true,
+			ticksuffix: ' ',
+            showgrid: false,
+            showline: false,
+		},
+		dragmode: false,
+		clickmode: 'none',
+        };
+
+        var countryEnrollRatePlotLayout = {
+        autosize: true,
+        showlegend: false,
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        hovermode: false,
+        margin: {
+			r: 10,
+			t: 20,
+			b: 10,
+			pad: 0,	
+		},
+        font: {
+            family: 'Montserrat',
+            size: 12,
+            color: '#00000',
+        },
+		xaxis: {
+            autorange: false,
+			range: [],
+			tick0: 0,
+			dtick: 1,
+            showgrid: false,
+            showline: false,
+            showticklabels: false,
+		},
+		yaxis: {
+			automargin: true,
+			ticksuffix: ' ',
+            showgrid: false,
+            showline: false,
+		},
+		dragmode: false,
+		clickmode: 'none',
+        };
+
+        var countryEnrolledPlotLayout = {
+        autosize: true,
+        showlegend: false,
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        hovermode: false,
+        margin: {
+			r: 10,
+			t: 20,
+			b: 10,
+			pad: 0,	
+		},
+        font: {
+            family: 'Montserrat',
+            size: 12,
+            color: '#00000',
+        },
+		xaxis: {
+            autorange: false,
+			range: [],
+			tick0: 0,
+			dtick: 1,
+            showgrid: false,
+            showline: false,
+            showticklabels: false,
+		},
+		yaxis: {
+			automargin: true,
+			ticksuffix: ' ',
+            showgrid: false,
+            showline: false,
+		},
+		dragmode: false,
+		clickmode: 'none',
+        };
+
     
-    Plotly.newPlot('countryScreenPlot', countryScreenPlotData);
-    Plotly.newPlot('countryScreenFailPlot', countryScreenFailPlotData);
-    Plotly.newPlot('countryEnrolledPlot', countryEnrolledPlotData);
-    Plotly.newPlot('countryEnrolledRatePlot', countryEnrollRatePlotData);
+
+    Plotly.newPlot('countryScreenPlot', countryScreenPlotData, countryScreenPlotLayout, boxConfig, {staticPlot: true});
+    Plotly.newPlot('countryScreenFailPlot', countryScreenFailPlotData, countryScreenFailPlotLayout, boxConfig, {staticPlot: true});
+    Plotly.newPlot('countryEnrolledPlot', countryEnrolledPlotData, countryEnrolledPlotLayout, boxConfig, {staticPlot: true});
+    Plotly.newPlot('countryEnrolledRatePlot', countryEnrollRatePlotData, countryEnrollRatePlotLayout, boxConfig, {staticPlot: true});
 </script>
 {% endblock content2 %}

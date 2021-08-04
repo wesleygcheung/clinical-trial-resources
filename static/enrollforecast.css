@@ -31,16 +31,19 @@ button:focus {
     grid-template-rows: auto;
     grid-auto-flow: row;
     width: 100%;
+    margin-bottom: 5rem;
 }
 .dashboard-header{
     grid-column: 3 / 9;
     grid-row: 1 / 1;
     align-self: start;
     justify-self: start;
+    margin-bottom: 2rem;
 }
 .dashboard-bans-header{
     grid-column: 3 / 9;
     grid-row: 2 / 2;
+    margin-bottom: 2rem;
 }
 .dashboard-bans{
     grid-column: 3 / 9;
@@ -48,6 +51,7 @@ button:focus {
     align-self: start;
     justify-self: center;
     text-align: center;
+    margin-bottom: 2rem;
 }
 .bans-card{
     display: inline-block;
@@ -58,28 +62,38 @@ button:focus {
     font-weight: bold;
     font-size: 30px;
     color: var(--button-color);
+    
 }
 .dashboard-screeningPlot-container{
     grid-column: 3 / 9;
     grid-row: 4 / 4;
+    margin-bottom: 2rem;
 }
 .dashboard-enrollPlot-container{
     grid-column: 3 / 9;
     grid-row: 5 / 5;
+    margin-bottom: 2rem;
 }
 .dashboard-countryScreening{
     grid-column: 3 / 9;
     grid-row: 6 / 6;
     text-align: center;
+    margin-bottom: 2rem;
+    min-height: 40vh;
+    height: auto;
 }
 .dashboard-countryScreeningPlot{
     display: inline-block;
     width: 40%;
+    height: auto;
+
 }
 .dashboard-countryEnroll{
     grid-column: 3 / 9;
     grid-row: 7 / 7;
     text-align: center;
+    min-height: 40vh;
+    height: auto;
 }
 
 .error {
