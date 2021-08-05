@@ -8,79 +8,87 @@
 <div class="main-grid">
     <div class="main-section1">
         <hr class="header-line">
-        <h2><b>Enrollment Forecast</b></h2>
-        Enter in countries or sites into the table below along with enrollment rates in order to view metrics and forecast when the target enrollment will be met.
+        <h2><b>Clinical Trial Enrollment Forecasting</b></h2><br>
+
+        This enrollment forecast tool allows users to input a variety of parameters to calculate when target enrollment will be met for a clinical trial:<br><br>
+        <ul>
+            <li><b>Target Enrollment:</b> The study's overall enrollment target</li>
+            <li><b>Current Enrollment <i>(Optional)</i>:</b> The number of subjects currently enrolled on the study</li>
+            <li><b>Country:</b> Add a row for each activated or proposed country for the study</li>
+            <li><b>Start Date:</b> Enter the start date for the country to start screening and enrolling</li>
+            <li><b>Stop Date <i>(Optional)</i>:</b> Enter a stop date for the country to stop screening and enrolling</li>
+            <li><b>Screen Fail %:</b> Enter in the country's screen fail percentage as a decimal between 0 and 1 (e.g., 0.25 for a 25% Screen Fail %)</li>
+            <li><b>Enrollment Rate:</b> Enter the country's enrollment rate defined as enrolled subjects per country per month (e.g., 2.5)</li>
+        </ul>
+        Additional countries can be added by clicking the 'Add Row' button. Remove countries by clicking 'Remove Row' or the 'X' button next to the row.<br><br>
+        Press the 'Click to Run' button below and the enrollment forecast will calculate when target enrollment will be achieved (if possible), total screened, total enrolled, global screen fail %, global enrollment rate, and more.
     </div>
     <div class="main-section2">
         <form class="" id="enrollform" method="POST" action="">
-            <legend class="mb-4">
-                <hr class="header-line">
-                <h2 class="header5">Enrollment Parameters</h2>
-            </legend>
-            <div class="form-group">
-                <label class="form-control-label form-css" for="targetenrollment">Target Enrollment:</label>
+            <div class="form-group" style="display:inline-block; width: 20%;">
+                <label class="form-control-label form-css" for="targetenrollment"><b>Target Enrollment:</b></label>
                 <input class="form-control form-control-sm enrollmentfield" id="targetenrollment" name="targetenrollment" required step="1" min="1" type="number" value="" onchange="minCurrentEnroll(this.value)">
             </div>
-            <div class="form-group">
-                <label class="form-control-label form-css" for="currentenrollment">Current Enrollment:</label>
+            <div class="form-group" style="display:inline-block; width: 20%;margin-left: 10px;">
+                <label class="form-control-label form-css" for="currentenrollment"><b>Current Enrollment:</b></label>
                 <input class="form-control form-control-sm enrollmentfield" id="currentenrollment" name="currentenrollment" step="1" min="0" type="number" value="">
             </div>
-            <table style="width: 100%;" id="enrolltable">
+            <table class="enrolltable" id="enrolltable">
                 <colgroup>
-                    <col class="outlined" span="1" style="width: 34%;">
-                    <col class="outlined" span="1" style="width: 13%;">
-                    <col class="outlined" span="1" style="width: 13%;">
-                    <col class="outlined" span="1" style="width: 20%;">
-                    <col class="outlined" span="1" style="width: 20%;">
+                    <col span="1" style="width: 34%;">
+                    <col span="1" style="width: 13%;">
+                    <col span="1" style="width: 13%;">
+                    <col span="1" style="width: 20%;">
+                    <col span="1" style="width: 20%;">
                     <col span="1" style="width: 5%;">
                 </colgroup>
                 <thead>
                     <tr>
-                        <th class="outlined" >Country</th>
-                        <th class="outlined" >Start Date</th>
-                        <th class="outlined" >Stop Date</th>
-                        <th class="outlined" >Screen Fail %</th>
-                        <th class="outlined" >Enrollment Rate</th>
+                        <th>Country</th>
+                        <th>Start Date</th>
+                        <th>Stop Date</th>
+                        <th>Screen Fail %</th>
+                        <th>Enrollment Rate</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody id="tablebody">
                     <tr id="row-1">
-                        <td class="outlined" >
+                        <td class="tableCell">
                             <span class="autocomplete-select" id="autocomplete-1"></span>
                             <input class="form-check form-check-inline form-control form-css2 country" required type="text" name="country-1" id="country-1" style="display:none">
                         </td>
-                        <td class="outlined" >
+                        <td class="tableCell">
                             <input class="form-control form-control-sm startdate" id="startdate-1" name="startdate-1" onchange="minEndDate(this.id)" required type="month" value="">
                         </td>
-                        <td class="outlined" >
+                        <td class="tableCell">
                             <input class="form-control form-control-sm enddate" id="enddate-1" name="enddate-1" type="month" value="">
                         </td>
-                        <td class="outlined" >
+                        <td class="tableCell">
                             <input class="form-control form-control-sm sfrate" id="sfrate-1" min="0" max="0.9999" name="sfrate-1" required step="0.0001" type="number" value="">
                         </td>
-                        <td class="outlined" >
+                        <td class="tableCell">
                             <input class="form-control form-control-sm enrollmentrate" id="enrollmentrate-1" min="0.0001" name="enrollmentrate-1" required step="0.0001" type="number" value="">
                         </td>
-                        <td>
+                        <td class="tableCell">
                             <button type="button" id="removebutton-1" onclick="removeThisRow(this.id)" style="visibility: hidden;outline: none; border: none;background-color: rgba(0,0,0,0)"><i class="fas fa-times" style="padding-left: 5px;"></i></button>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <button type="button" onclick="addRow()">Add Row</btn>
-            <button type="button" onclick="removeRow()">Remove Row</btn>
-            <button type="button" onclick="compileData()">Click to Run</button>
+            <button class="table-button" type="button" onclick="addRow()">Add Row</btn>
+            <button class="table-button" type="button" onclick="removeRow()" style="margin-left: 20px;">Remove Row</btn>
+            <button class="table-button" type="button" onclick="compileData()" style="float: right;">Click to Run</button>
         </form>
     </div>
-    <div class="main-section3">
+    <div class="hidden main-section3" id="section3">
         <div class="dashboard-header">
 
             <h2><b>Enrollment Forecast Results</b></h2>
         </div>
         <div class="dashboard-bans-header">
             <hr class="header-line">
-            <h3>Global Metrics</h3>
+            <h4>Global Metrics</h4>
         </div>
         <div class="dashboard-bans">
             <div class="bans-card">
@@ -122,39 +130,38 @@
         </div>
         <div class="dashboard-screeningPlot-container">
             <hr class="header-line">
-            <h3>Forecasted Screening</h3>
+            <h4>Screening Forecast Running Total</h4>
             <div class="dashboard-areaPlot" id="screeningPlot">
             </div>
         </div>
+
         <div class="dashboard-enrollPlot-container">
             <hr class="header-line">
-            <h3>Forecasted Enrollment</h3>
+            <h4>Enrollment Forecast Running Total</h4>
             <div class="dashboard-areaPlot" id="enrollPlot">
             </div>
         </div>
-        <div class="dashboard-countryScreening">
-            <div class="dashboard-countryScreeningPlot" style="float: left;">
-                <hr class="header-line">
-                <h3 style="text-align: left">Total Screeners by Country</h3>
-                <div id="countryScreenPlot"></div>
-            </div>
-            <div class="dashboard-countryScreeningPlot" style="float: right;">
-                <hr class="header-line">
-                <h3 style="text-align: left">Screen Failure % by Country</h3>
-                <div id="countryScreenFailPlot"></div>
-            </div>
+
+        <div class="dashboard-countryScreenPlot">
+            <hr class="header-line">
+            <h4>Total Screened by Country</h4>
+            <div id="countryScreenPlot"></div>
         </div>
-        <div class="dashboard-countryEnroll">
-            <div class="dashboard-countryScreeningPlot" style="float: left;">
-                <hr class="header-line">
-                <h3 style="text-align: left">Total Enrolled by Country</h3>
-                <div id="countryEnrolledPlot"></div>
-            </div>
-            <div class="dashboard-countryScreeningPlot" style="float: right;">
-                <hr class="header-line">
-                <h3 style="text-align: left">Enrollment Rate by Country</h3>
-                <div id="countryEnrolledRatePlot"></div>
-            </div>
+        <div class="dashboard-countryScreenFailPlot">
+            <hr class="header-line">
+            <h4>Screen Failure % by Country</h4>
+            <div id="countryScreenFailPlot"></div>
+        </div>
+
+        <div class="dashboard-countryEnrollPlot">
+            <hr class="header-line">
+            <h4>Total Enrolled by Country</h4>
+            <div id="countryEnrolledPlot"></div>
+        </div>
+        <div class="dashboard-countryEnrollRatePlot">
+            <hr class="header-line">
+            <h4>Enrollment Rate by Country</h4>
+            <div id="countryEnrolledRatePlot"></div>
         </div>
     </div>
 </div>
@@ -361,8 +368,11 @@
 
     var autocompleteDict = {};
 
-    var barcolorgradient = ['#061f68', 	'#0a236c', 	'#0d2770', 	'#112b74', 	'#142f78', 	'#17327c', 	'#1a3680', 	'#1d3a84', 	'#203e88', 	'#23428c', 	'#264790', 	'#294b94', 	'#2c4f97', 	'#2f539b', 	'#32579f', 	'#355ba3', 	'#385fa7', 	'#3b64ab', 	'#3e68af', 	'#416cb3', 	'#4470b7', 	'#4775bb', 	'#4b79be', 	'#4e7dc2', 	'#5182c6', 	'#5586ca', 	'#588ace', 	'#5c8fd2', 	'#5f93d5', 	'#6398d9', 	'#669cdd', 	'#6aa1e1', 	'#6ea5e5', 	'#71aae8', 	'#75aeec', 	'#79b3f0', 	'#7db7f4', 	'#81bcf7', 	'#85c0fb', 	'#89c5ff'];
-	var barcolorlist = [];
+    var enrollColorGradient = ['#061f68', 	'#0a236c', 	'#0d2770', 	'#112b74', 	'#142f78', 	'#17327c', 	'#1a3680', 	'#1d3a84', 	'#203e88', 	'#23428c', 	'#264790', 	'#294b94', 	'#2c4f97', 	'#2f539b', 	'#32579f', 	'#355ba3', 	'#385fa7', 	'#3b64ab', 	'#3e68af', 	'#416cb3', 	'#4470b7', 	'#4775bb', 	'#4b79be', 	'#4e7dc2', 	'#5182c6', 	'#5586ca', 	'#588ace', 	'#5c8fd2', 	'#5f93d5', 	'#6398d9', 	'#669cdd', 	'#6aa1e1', 	'#6ea5e5', 	'#71aae8', 	'#75aeec', 	'#79b3f0', 	'#7db7f4', 	'#81bcf7', 	'#85c0fb', 	'#89c5ff'];
+	var enrollColorList = [];
+
+    var screenColorGradient = ['#7c023f', 	'#7f0340', 	'#830340', 	'#860441', 	'#8a0541', 	'#8d0642', 	'#910742', 	'#940843', 	'#980a43', 	'#9b0b43', 	'#9e0d44', 	'#a20f44', 	'#a51144', 	'#a91244', 	'#ac1444', 	'#af1644', 	'#b31844', 	'#b61a44', 	'#b91c44', 	'#bd1e44', 	'#c02044', 	'#c32244', 	'#c62443', 	'#ca2643', 	'#cd2843', 	'#d02a42', 	'#d32d42', 	'#d62f42', 	'#d93141', 	'#dc3440', 	'#df3640', 	'#e2383f', 	'#e53b3e', 	'#e83d3e', 	'#eb403d', 	'#ee423c', 	'#f1453b', 	'#f4483a', 	'#f64a39', 	'#f94d38'];
+    var screenColorList = [];
 
     $("#enrollform").validate();
     function minCurrentEnroll(targetEnrollment){
@@ -385,23 +395,23 @@
         var rows = rowCounter;
         $('#tablebody').append(`
             <tr id="row-`+String(rows)+`">
-                <td class="outlined" >
+                <td class="tableCell">
                     <span class="autocomplete-select" id="autocomplete-`+String(rows)+`"></span>
                     <input class="form-check form-check-inline form-control form-css2 country" required type="text" name="country-`+String(rows)+`" id="country-`+String(rows)+`" style="display:none">
                 </td>
-                <td class="outlined" >
+                <td class="tableCell">
                     <input class="form-control form-control-sm startdate" id="startdate-`+String(rows)+`" name="startdate-`+String(rows)+`" onchange="minEndDate(this.id)" required type="month" value="">
                 </td>
-                <td class="outlined" >
+                <td class="tableCell">
                     <input class="form-control form-control-sm enddate" id="enddate-`+String(rows)+`" name="enddate-`+String(rows)+`" type="month" value="">
                 </td>
-                <td class="outlined" >
+                <td class="tableCell">
                     <input class="form-control form-control-sm sfrate" id="sfrate-`+String(rows)+`" min="0" max ="0.9999" name="sfrate-`+String(rows)+`" required step="0.0001" type="number" value="">
                 </td>
-                <td class="outlined" >
+                <td class="tableCell">
                     <input class="form-control form-control-sm enrollmentrate" id="enrollmentrate-`+String(rows)+`" min="0.0001" name="enrollmentrate-`+String(rows)+`" required step="0.0001" type="number" value="">
                 </td>
-                <td>
+                <td class="tableCell">
                     <button type="button" id="removebutton-`+String(rows)+`" onclick="removeThisRow(this.id)" style="outline: none; border: none;background-color: rgba(0,0,0,0)"><i class="fas fa-times" style="padding-left: 5px;"></i></button>
                 </td>
             </tr>`
@@ -432,6 +442,11 @@
             delete autocompleteDict['autocomplete-'+String(row)];
         }
     };
+    function countryRegex(countryName) {
+        var rxp = /(.{1,13}\b|.{13})/g;
+        fixedName = countryName.match(rxp).join("<br>");
+        return fixedName;
+	};
     function compileData(){
         if ($("#enrollform").valid()){
             var rows = $('#enrolltable tr').length-1;
@@ -465,16 +480,19 @@
                         $('#globalEnrolled').text(String(parseInt(data['Global Randomized'])+parseInt($('#currentenrollment').val()))+'/'+String($('#targetenrollment').val()));
                     }                    
                     $('#globalEnrollRate').text(data['Global Enrollment Rate']);
+                    if ($('#section3').hasClass("hidden")){
+                        $('#section3').removeClass("hidden");
+                    };
+                    var scrollSection = document.getElementById('section3');
+                    scrollSection.scrollIntoView({ behavior: 'smooth' });
                     screeningTraces = [];
                     enrollTraces = [];
                     for (country of Object.keys(data['ScreeningPlot'])){
 
-                        var screenTrace = {x: data['ScreeningPlot'][country]['Dates'], y: data['ScreeningPlot'][country]['Screeners'], name: country, stackgroup: 'one'};
+                        var screenTrace = {x: data['ScreeningPlot'][country]['Dates'], y: data['ScreeningPlot'][country]['Screeners'], name: country, stackgroup: 'one', line: {color: ''}};
                         screeningTraces.push(screenTrace);
-                        var enrollTrace = {x: data['EnrolledPlot'][country]['Dates'], y: data['EnrolledPlot'][country]['Enrolled'], name: country, stackgroup: 'one'};
+                        var enrollTrace = {x: data['EnrolledPlot'][country]['Dates'], y: data['EnrolledPlot'][country]['Enrolled'], name: country, stackgroup: 'one', line: {color: ''}};
                         enrollTraces.push(enrollTrace);
-                        Plotly.react('screeningPlot',screeningTraces, overTimePlotLayout);
-                        Plotly.react('enrollPlot',enrollTraces, overTimePlotLayout);
                     };
 
                     var horizBarPlots = {'Screeners': [countryScreenPlotData[0],countryScreenPlotLayout], 'Screen Fail Rate': [countryScreenFailPlotData[0],countryScreenFailPlotLayout], 'Rand': [countryEnrolledPlotData[0],countryEnrolledPlotLayout], 'Enrollment Rate': [countryEnrollRatePlotData[0],countryEnrollRatePlotLayout]};
@@ -486,30 +504,35 @@
                     for (plot of Object.keys(horizBarPlots)){
                         for (country in data[plot]){
                             horizBarPlots[plot][0]['x'].push(data[plot][country][1]);
-                            horizBarPlots[plot][0]['y'].push('<b>'+data[plot][country][0]+"</b>");
+                            horizBarPlots[plot][0]['y'].push('<b>'+countryRegex(data[plot][country][0])+'</b>');
                             if (plot == 'Screen Fail Rate'){
                                 horizBarPlots[plot][0]['text'].push('<b>'+String(data[plot][country][1])+'%</b>');
                             } else{
                                 horizBarPlots[plot][0]['text'].push('<b>'+String(data[plot][country][1])+'</b>');
                             };
                         };
-                        horizBarPlots[plot][1]['xaxis']['range'] = [0,(parseInt(data[plot][data[plot].length-1][1])*1.20)];
+                        horizBarPlots[plot][1]['xaxis']['range'] = [0,(Math.max(...horizBarPlots[plot][0]['x'])*1.20)];
                     }
                     var countrylen = data['Countries'].length;
                     var colorstep = Math.floor(40 / countrylen);
                     for (i in data['Countries']) {
-                        barcolorlist.push(barcolorgradient[(i*colorstep)]);
-                    };
-                    barcolorlist.reverse();
-                    Plotly.react('countryScreenPlot', countryScreenPlotData, countryScreenPlotLayout, boxConfig, {staticPlot: true});
-                    Plotly.react('countryScreenFailPlot', countryScreenFailPlotData, countryScreenFailPlotLayout, boxConfig, {staticPlot: true});
-                    Plotly.react('countryEnrolledPlot', countryEnrolledPlotData, countryEnrolledPlotLayout, boxConfig, {staticPlot: true});
-                    Plotly.react('countryEnrolledRatePlot', countryEnrollRatePlotData, countryEnrollRatePlotLayout, boxConfig, {staticPlot: true});
+                        enrollColorList.push(enrollColorGradient[(i*colorstep)]);
+                        screenColorList.push(screenColorGradient[(i*colorstep)]);
+                        screeningTraces[i]['fillcolor'] = screenColorGradient[(i*colorstep)];
+                        enrollTraces[i]['fillcolor'] = enrollColorGradient[(i*colorstep)];
+                        screeningTraces[i]['line']['color'] = screenColorGradient[(i*colorstep)];
+                        enrollTraces[i]['line']['color'] = enrollColorGradient[(i*colorstep)];
 
-                    Plotly.react('countryScreenPlot', countryScreenPlotData, countryScreenPlotLayout, boxConfig, {staticPlot: true});
-                    Plotly.react('countryScreenFailPlot', countryScreenFailPlotData, countryScreenFailPlotLayout, boxConfig, {staticPlot: true});
-                    Plotly.react('countryEnrolledPlot', countryEnrolledPlotData, countryEnrolledPlotLayout, boxConfig, {staticPlot: true});
-                    Plotly.react('countryEnrolledRatePlot', countryEnrollRatePlotData, countryEnrollRatePlotLayout, boxConfig, {staticPlot: true});
+                    };
+                    enrollColorList.reverse();
+                    screenColorList.reverse();
+                    Plotly.newPlot('screeningPlot',screeningTraces, overTimePlotLayout);
+                    Plotly.newPlot('enrollPlot',enrollTraces, overTimePlotLayout);
+                    Plotly.newPlot('countryScreenPlot', countryScreenPlotData, countryScreenPlotLayout, boxConfig, {staticPlot: true});
+                    Plotly.newPlot('countryScreenFailPlot', countryScreenFailPlotData, countryScreenFailPlotLayout, boxConfig, {staticPlot: true});
+                    Plotly.newPlot('countryEnrolledPlot', countryEnrolledPlotData, countryEnrolledPlotLayout, boxConfig, {staticPlot: true});
+                    Plotly.newPlot('countryEnrolledRatePlot', countryEnrollRatePlotData, countryEnrollRatePlotLayout, boxConfig, {staticPlot: true});
+
                 }
             });
         };
@@ -528,6 +551,8 @@
     var overTimePlotLayout = {
         showlegend: true,
         legend: {"orientation": "h"},
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        paper_bgcolor: 'rgba(0,0,0,0)',
         margin: {
 			r: 25,
 			t: 20,
@@ -563,12 +588,12 @@
         hoverinfo: 'none',
         orientation: 'h',
         marker: {
-			color: barcolorlist,
+			color: screenColorList,
 			line: {
 				width: 2,
-				color: barcolorlist,
+				color: screenColorList,
 			},
-			opacity: 0.70,
+			opacity: 1,
 		},
     }];
 
@@ -581,12 +606,12 @@
         textposition: 'outside',
         hoverinfo: 'none',
         marker: {
-			color: barcolorlist,
+			color: screenColorList,
 			line: {
 				width: 2,
-				color: barcolorlist,
+				color: screenColorList,
 			},
-			opacity: 0.70,
+			opacity: 1,
 		},
     }];
     var countryEnrollRatePlotData = [{
@@ -598,12 +623,12 @@
         textposition: 'outside',
         hoverinfo: 'none',
         marker: {
-			color: barcolorlist,
+			color: enrollColorList,
 			line: {
 				width: 2,
-				color: barcolorlist,
+				color: enrollColorList,
 			},
-			opacity: 0.70,
+			opacity: 1,
 		},
     }];
     var countryEnrolledPlotData = [{
@@ -615,18 +640,19 @@
         textposition: 'outside',
         hoverinfo: 'none',
         marker: {
-			color: barcolorlist,
+			color: enrollColorList,
 			line: {
 				width: 2,
-				color: barcolorlist,
+				color: enrollColorList,
 			},
-			opacity: 0.70,
+			opacity: 1,
 		},
     }];
     var countryScreenPlotLayout = {
         autosize: true,
         showlegend: false,
         paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
         hovermode: false,
         margin: {
 			r: 10,
@@ -662,6 +688,7 @@
         autosize: true,
         showlegend: false,
         paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
         hovermode: false,
         margin: {
 			r: 10,
@@ -697,6 +724,7 @@
         autosize: true,
         showlegend: false,
         paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
         hovermode: false,
         margin: {
 			r: 10,
@@ -732,6 +760,7 @@
         autosize: true,
         showlegend: false,
         paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
         hovermode: false,
         margin: {
 			r: 10,
@@ -762,8 +791,6 @@
 		dragmode: false,
 		clickmode: 'none',
         };
-
-    
 
     Plotly.newPlot('countryScreenPlot', countryScreenPlotData, countryScreenPlotLayout, boxConfig, {staticPlot: true});
     Plotly.newPlot('countryScreenFailPlot', countryScreenFailPlotData, countryScreenFailPlotLayout, boxConfig, {staticPlot: true});

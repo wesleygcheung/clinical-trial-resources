@@ -32,7 +32,7 @@
                 <div class="collapse navbar-collapse nav-rightalign" id="navbarToggle">
                     <div class="navbar-nav ml-auto dropdown-menu-right">
                         <a class="nav-item nav-link nav-main-item" href="{{ url_for('home') }}" id="home"><span class="navheader" id="homespan">Home</span></a>
-                        <a class="nav-item nav-link nav-main-item" href="{{ url_for('enrollment') }}" id="enroll"><span class="navheader" id="enrollspan">Enrollment Forecast</span></a>
+                        <a class="nav-item nav-link nav-main-item" href="{{ url_for('home')+'#projects' }}" id="enroll"><span class="navheader" id="enrollspan">Projects</span></a>
                     </div>
                 </div>
 
@@ -43,28 +43,13 @@
     {% endblock %}
     <footer class="footer">
         <div class="footer-section1">
-            <div style="margin-bottom: 0.75em;">
-                <span class="navfooter">About</span>
-                <span class="footer-spacing"> • </span>
-                <span class="navfooter">Terms of Use</span>
-                <span class="footer-spacing"> • </span>
-                <span class="navfooter">Privacy Policy</span>
-            </div>
-            <span style="color:#9e9e9e;font-size: 0.75rem;">© 2021 Wesley Cheung</span>
-            
-        </div>
-        <div class="footer-section2">
+            <h4 class="navheader2" id="navheader1" style="margin-bottom: 0.75em;"><a class="footerlogo" href="{{ url_for('home') }}">CTR</a></h4>
             <a href="https://github.com/wesleygcheung/" class="socials" target="_blank" rel="noreferrer noopener"><i class="fab fa-github fa-lg social-icons"></i></a>
-            <a href="https://www.facebook.com/wgcheung" class="socials" target="_blank" rel="noreferrer noopener"><i class="fab fa-facebook-square fa-lg social-icons"></i></a>
-            <a href="https://www.instagram.com/wesley.cheung/" class="socials" target="_blank" rel="noreferrer noopener"><i class="fab fa-instagram fa-lg social-icons"></i></a>
             <a href="https://www.linkedin.com/in/wgcheung/" class="socials" target="_blank" rel="noreferrer noopener"><i class="fab fa-linkedin fa-lg social-icons"></i></a>
             <a href="mailto: wesley.g.cheung@gmail.com" class="socials" target="_blank" rel="noreferrer noopener"><i class="fas fa-envelope fa-lg social-icons"></i></a>
+            <span style="color:#9e9e9e;font-size: 0.75rem;display:block;margin-top: 1em;">Developed by Wesley Cheung</span>
+            
         </div>
-            <div class="footer-section3 logo navbar-brand">
-                <a href="/">
-                <h4 class="navheader2">CTR</h4>
-                </a>
-            </div>
     </footer>
 </div>
     <script>
@@ -72,7 +57,7 @@
         for (link of navlinks) {
             if (link.getAttribute("href") == window.location.pathname) {
                 var spanid = link.id+"span";
-                document.getElementById(spanid).style.color = '#6940c9';
+                document.getElementById(spanid).style.color = '#183eb3';
             }
         };
 

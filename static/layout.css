@@ -1,8 +1,9 @@
 :root {
-    --gradient: linear-gradient(45deg, #794ac5, #da56b2, #ff6f91, #e27c56);
-    --button-color: #762acc;
-    --button-color-hover: #671eb9;
-    --header-line-color: #5519c5;
+    --gradient: linear-gradient(45deg, #091a63, #1c339c, #2d46b6, #526de4);
+    --footergradient: linear-gradient(45deg, #ffffff, #cdd2e9, #a1abdb, #7e8cca);
+    --button-color: #183eb3;
+    --button-color-hover: #113294;
+    --header-line-color: #113294;
 }
 body {
     background-color:#f7f7f7;
@@ -27,6 +28,7 @@ a:active {
 h1 {
     font-size: 80px;
 }
+
 .header-line{
     border:0;
     height:2px;
@@ -50,11 +52,18 @@ h1 {
     position: relative;
 }
 .navheader:hover {
-    color: #6940c9;
+    color: var(--button-color);
     text-decoration: none;
 }
 .logo {
     background-image: var(--gradient);
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.footerlogo {
+    background-image: var(--footergradient);
     -webkit-text-fill-color: transparent;
     -webkit-background-clip: text;
     color: transparent;
@@ -76,7 +85,7 @@ h1 {
     content: '';
     display: block;
     height: 2px;
-    background: #6940c9;
+    background: var(--button-color);
     position: absolute;
     border-radius: 5px;
     bottom: -0.3em;
@@ -128,7 +137,7 @@ h1 {
 }
 .footer{
     display: grid;
-    background-color: #21003b;
+    background-color: #05073f;
     color: #ffffff;
     height: auto;
     grid-template-columns: repeat(10, 1fr);
@@ -185,7 +194,8 @@ h1 {
     justify-self: end;
 }
 .socials {
-    margin-left: 2rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
 }
 .social-icons{
     transition: transform ease-in-out 250ms;

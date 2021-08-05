@@ -1,7 +1,7 @@
 :root {
-    --button-color: #762acc;
-    --button-color-hover: #671eb9;
-    --header-line-color: #5519c5;
+    --button-color: #183eb3;
+    --button-color-hover: #113294;
+    --header-line-color: #113294;
 }
 button:focus {
     border: none;
@@ -15,16 +15,67 @@ button:focus {
     width: 100%;
     background-color: #ffffff;
     padding-top: 77.25px;
+
 }
 .main-section1{
-    grid-column: 3 / 9;
+    grid-column: 1 / 11;
     grid-row: 1 / 1;
+    height: 70vh;
+    background-image: url('/static/images/home.png');
+    background-position: center center;
+    z-index: 1;
+}
+.home-h1{
+    font-size: 50px;
+    color: var(--header-line-color);
+}
+.main-section1-text{
+    grid-column: 3 / 7;
+    grid-row: 1 / 1;
+    color: #000000;
+    justify-self: start;
+    align-self: center;
+    text-align: left;
+    z-index: 3;
+    font-weight: 600;
+}
+.header-text{
+    line-height: 2rem;
 }
 .main-section2{
+    grid-column: 1 / 11;
+    grid-row: 2 / 2;
+    min-height: 40vh;
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: auto;
+    grid-auto-flow: row;
+    width: 100%;
+
+}
+.main-section2-header{
+    grid-column: 3 / 9;
+    grid-row: 1 / 1;
+    justify-self: center;
+    margin-bottom: 2rem;
+}
+.main-section2-projects{
     grid-column: 3 / 9;
     grid-row: 2 / 2;
+    justify-self: center;
 }
-
+.project{
+    border-style: none;
+    border-radius: 20px;
+    box-shadow: 3px 3px 8px #adadad;
+    padding: 1.5rem;
+    transition: transform ease 250ms;
+}
+.project:hover{
+    transform: scale(1.03);
+}
 @media screen and (max-width: 480px) {
 
 }
