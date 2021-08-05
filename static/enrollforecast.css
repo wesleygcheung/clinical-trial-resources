@@ -30,6 +30,28 @@ button:focus {
     width: 100%;
     margin-bottom: 1rem;
 }
+.countryCol{
+    width: 34%;
+}
+.startCol{
+    width: 13%;
+}
+.stopCol{
+    width: 13%;
+}
+.sfCol{
+    width: 20%;
+}
+.enrollCol{
+    width: 20%;
+}
+.xCol{
+    width: 5%;
+}
+.enrollmentInputDiv{
+    display:inline-block; 
+    width: 20%;
+}
 .table-button{
     background-color: var(--button-color);
     border-radius: 5px;
@@ -118,6 +140,21 @@ button:focus {
     grid-row: 7 / 7;
     margin-bottom: 2rem;
     min-height: 40vh;
+}
+.topButton{
+    grid-column: 8 / 9;
+    grid-row: 8 / 8;
+    justify-self: center;
+    align-self: end;
+    border-style: none;
+    border-radius: 20px;
+    padding: 1rem;
+    box-shadow: 3px 3px 6px #b9b9b9;
+    transition: transform ease 250ms;
+    cursor: pointer;
+}
+.topButton:hover{
+    transform: scale(1.1);
 }
 .tableCell{
     padding-bottom: 0.5rem;
@@ -236,5 +273,211 @@ button:focus {
     width: 100%;
 }
 @media screen and (max-width: 480px) {
-
+    .main-grid{
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        grid-template-rows: auto;
+        grid-auto-flow: row;
+        width: 100%;
+        background-color: #ffffff;
+        padding-top: 77.25px;
+        padding-bottom: 2rem;
+    }
+    .main-section1{
+        grid-column: 1 / 11;
+        grid-row: 1 / 1;
+        padding: 1rem;
+    }
+    .main-section2{
+        grid-column: 1 / 11;
+        grid-row: 2 / 2;
+        margin-top: 1rem;
+        padding: 1rem;
+        font-size: 12px;
+    }
+    .enrolltable{
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    .enrollmentInputDiv{
+        display:inline-block; 
+        width: 40%;
+    }
+    .autocomplete-select{
+        width: 50px;
+    }
+    .country{
+        width: 50px;
+    }
+    .startdate{
+        width: 70px;
+    }
+    .enddate{
+        width: 70px;
+    }
+    .sfrate{
+        width: 50px;
+    }
+    .enrollmentrate{
+        width: 50px;
+    }
+    .xCol{
+        width: 5px;
+    }
+    .table-button{
+        background-color: var(--button-color);
+        border-radius: 5px;
+        border: none;
+        color: white;
+        text-align: center;
+        vertical-align: middle;
+        padding: 0.50em;
+        outline: none;
+    }
+    .table-button:hover{
+        background-color: var(--button-color-hover);
+    }
+    .main-section3{
+        grid-column: 1 / 11;
+        grid-row: 3 / 3;
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        grid-template-rows: auto;
+        grid-auto-flow: row;
+        width: 100%;
+        margin-top: 1rem;
+        padding: 1rem;
+    }
+    .dashboard-header{
+        grid-column: 1 / 11;
+        grid-row: 1 / 1;
+        align-self: start;
+        justify-self: start;
+        margin-bottom: 1rem;
+    }
+    .dashboard-bans-header{
+        grid-column: 1 / 11;
+        grid-row: 2 / 2;
+        margin-bottom: 2rem;
+    }
+    .dashboard-bans{
+        grid-column: 1 / 11;
+        grid-row: 3 / 3;
+        align-self: start;
+        justify-self: center;
+        text-align: center;
+        margin-bottom: 2rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        row-gap: 1rem;
+        column-gap: 2rem;
+    }
+    .bans-card{
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: none;
+    }
+    .startCard{
+        grid-column: 1 / 2;
+        grid-row: 1 / 1;
+        justify-self: center;
+        align-self: center;
+    }
+    .stopCard{
+        grid-column: 2 / 3;
+        grid-row: 1 / 1;
+        justify-self: center;
+        align-self: center;
+    }
+    .sfCard{
+        grid-column: 1 / 2;
+        grid-row: 2 / 2;
+        justify-self: center;
+        align-self: center;
+    }
+    .screenedCard{
+        grid-column: 2 / 3;
+        grid-row: 2 / 2;
+        justify-self: center;
+        align-self: center;
+    }
+    .enrolledCard{
+        grid-column: 1 / 2;
+        grid-row: 3 / 3;
+        justify-self: center;
+        align-self: center;
+    }
+    .enrollRateCard{
+        grid-column: 2 / 3;
+        grid-row: 3 / 3;
+        justify-self: center;
+        align-self: center;
+    }
+    .bans-card-data{
+        font-weight: bold;
+        font-size: 20px;
+        color: var(--header-line-color);
+        
+    }
+    .dashboard-screeningPlot-container{
+        grid-column: 1 / 11;
+        grid-row: 4 / 4;
+        margin-bottom: 2rem;
+    }
+    .dashboard-enrollPlot-container{
+        grid-column: 1 / 11;
+        grid-row: 5 / 5;
+        margin-bottom: 2rem;
+    }
+    .dashboard-countryScreenPlot{
+        grid-column: 1 / 11;
+        grid-row: 6 / 6;
+        margin-bottom: 2rem;
+        min-height: 40vh;
+    }
+    
+    .dashboard-countryScreenFailPlot{
+        grid-column: 1 / 11;
+        grid-row: 7 / 7;
+        margin-bottom: 2rem;
+        min-height: 40vh;
+    }
+    .dashboard-countryEnrollPlot{
+        grid-column: 1 / 11;
+        grid-row: 8 / 8;
+        margin-bottom: 2rem;
+        min-height: 40vh;
+    }
+    .dashboard-countryEnrollRatePlot{
+        grid-column: 1 / 11;
+        grid-row: 9 / 9;
+        margin-bottom: 2rem;
+        min-height: 40vh;
+    }
+    .tableCell{
+        padding-bottom: 0.5rem;
+        padding-top: 0.5rem;
+    }
+    .error {
+        color: rgb(184, 0, 0);
+        font-weight: bold;
+     }
+    .hidden{
+        display: none;
+    }
+    .topButton{
+        grid-column: 8 / 11;
+        grid-row: 10 / 10;
+        justify-self: center;
+        align-self: end;
+    }
+    .enrollmentfield{
+        width: 100%;
+    }
+    .select-pure__select {
+        font-size: 12px;
+        font-weight: 400;
+    }
 }

@@ -77,5 +77,62 @@ button:focus {
     transform: scale(1.03);
 }
 @media screen and (max-width: 480px) {
-
+    .main-section1{
+        grid-column: 1 / 11;
+        grid-row: 1 / 1;
+        height: 46vh;
+        background-image: url('/static/images/home.png');
+        background-position: 61% 50%;
+        background-size: cover;
+        z-index: 1;
+    }
+    .main-section1-text{
+        grid-column: 1 / 10;
+        grid-row: 1 / 1;
+        color: #000000;
+        justify-self: start;
+        align-self: center;
+        text-align: left;
+        z-index: 3;
+        font-weight: 600;
+        padding: 2rem;
+    }
+    .header-text{
+        line-height: 1rem;
+    }
+    .home-h1{
+        font-size: 30px;
+        color: var(--header-line-color);
+    }
+    .main-section2-header{
+        grid-column: 1 / 11;
+        grid-row: 1 / 1;
+        justify-self: center;
+        margin-bottom: 2rem;
+        padding-right: 2rem;
+        padding-left: 2rem;
+    }
+    .main-section2-projects{
+        grid-column: 1 / 11;
+        grid-row: 2 / 2;
+        justify-self: center;
+        padding-right: 2rem;
+        padding-left: 2rem;
+    }
+    .home-h3{
+        font-size: 16px;
+    }
+    .main-section2{
+        grid-column: 1 / 11;
+        grid-row: 2 / 2;
+        min-height: none;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        grid-template-rows: auto;
+        grid-auto-flow: row;
+        width: 100%;
+    
+    }
 }
