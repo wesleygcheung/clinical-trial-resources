@@ -14,7 +14,7 @@ button:focus {
     grid-auto-flow: row;
     width: 100%;
     background-color: #ffffff;
-    padding-top: 77.25px;
+    padding-top: 75px;
 
 }
 .main-section1{
@@ -84,7 +84,7 @@ button:focus {
         grid-auto-flow: row;
         width: 100%;
         background-color: #ffffff;
-        padding-top: 74px;
+        padding-top: 65px;
     }
     .main-section1{
         grid-column: 1 / 11;
