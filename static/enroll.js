@@ -275,7 +275,7 @@ var rxp = /(.{1,13}\b|.{13})/g;
 fixedName = countryName.match(rxp).join("<br>");
 return fixedName;
 };
-var csrftoken = $('meta[name=csrf-token]').attr('content');
+// var csrftoken = $('meta[name=csrf-token]').attr('content');
 
 function compileData(){
 if ($("#enrollform").valid()){
@@ -297,12 +297,11 @@ if ($("#enrollform").valid()){
         url: "/API/enrollment",
         type: "POST",
         data: JSON.stringify(finaldict),
-        headers: {
-            "X-CSRFToken": csrftoken,
-        },
+        // headers: {
+        //     "X-CSRFToken": csrftoken,
+        // },
         contentType: "application/json; charset=utf-8",
         success: function(data) { 
-            console.log(data);
             $('#globalStart').text(data['Global Start Date']);
             $('#globalStop').text(data['Global Stop Date']);
             $('#globalSFRate').text(String(data['Global SF Rate'])+'%');
