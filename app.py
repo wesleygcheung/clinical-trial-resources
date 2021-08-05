@@ -1,4 +1,5 @@
 from flask import Flask, render_template, url_for, request, jsonify
+from flask_wtf.csrf import CSRFProtect
 import pandas as pd
 import numpy as np
 import secrets
@@ -8,6 +9,7 @@ from functools import reduce
 
 ### Initialize Flask App ###
 app = Flask(__name__)
+CSRFProtect(app)
 app.config['SECRET_KEY'] = secrets.token_urlsafe(16)
 
 ### Website Routes ###

@@ -77,10 +77,19 @@ button:focus {
     transform: scale(1.03);
 }
 @media screen and (max-width: 480px) {
+    .main-grid{
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        grid-template-rows: auto;
+        grid-auto-flow: row;
+        width: 100%;
+        background-color: #ffffff;
+        padding-top: 74px;
+    }
     .main-section1{
         grid-column: 1 / 11;
         grid-row: 1 / 1;
-        height: 46vh;
+        height: 48vh;
         background-image: url('/static/images/home.png');
         background-position: 61% 50%;
         background-size: cover;
