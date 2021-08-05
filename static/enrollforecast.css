@@ -65,6 +65,21 @@ button:focus {
 .table-button:hover{
     background-color: var(--button-color-hover);
 }
+.loadingWheel{
+    display: block;
+    float: right;
+    margin-right: 15px;
+    border: 5px solid #d1d1d1; /* Light grey */
+    border-top: 5px solid #0300b3; /* Blue */
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    animation: spin 3s linear infinite;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 .main-section3{
     grid-column: 1 / 11;
     grid-row: 3 / 3;
@@ -336,6 +351,12 @@ button:focus {
     }
     .table-button:hover{
         background-color: var(--button-color-hover);
+    }
+    .loadingWheel{
+        border: 5px solid #d1d1d1; /* Light grey */
+        border-top: 5px solid #0300b3; /* Blue */
+        width: 30px;
+        height: 30px;
     }
     .main-section3{
         grid-column: 1 / 11;

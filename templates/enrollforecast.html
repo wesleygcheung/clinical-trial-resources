@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block header %}
+
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='enrollforecast.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js" crossorigin="anonymous"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -78,8 +79,11 @@
             </table>
             <button class="table-button" type="button" onclick="addRow()">Add Row</btn>
             <button class="table-button" type="button" onclick="removeRow()" style="margin-left: 20px;">Remove Row</btn>
+            
             <button class="table-button" type="button" onclick="compileData()" style="float: right;">Click to Run</button>
+            <div class="loadingWheel hidden" id="loadingWheel"></div>
         </form>
+        
     </div>
     <div class="hidden main-section3" id="section3">
         <div class="dashboard-header">

@@ -279,6 +279,9 @@ return fixedName;
 
 function compileData(){
 if ($("#enrollform").valid()){
+    if ($('#loadingWheel').hasClass('hidden')){
+        $('#loadingWheel').removeClass('hidden');
+    };
     var rows = $('#enrolltable tr').length-1;
     var columns = ['startdate','enddate','sfrate','enrollmentrate']
     var datadict = {'country': [],'startdate': [], 'enddate': [], 'sfrate': [], 'enrollmentrate': []};
@@ -302,6 +305,9 @@ if ($("#enrollform").valid()){
         // },
         contentType: "application/json; charset=utf-8",
         success: function(data) { 
+            if (!$('#loadingWheel').hasClass('hidden')){
+                $('#loadingWheel').addClass('hidden');
+            };
             $('#globalStart').text(data['Global Start Date']);
             $('#globalStop').text(data['Global Stop Date']);
             $('#globalSFRate').text(String(data['Global SF Rate'])+'%');
