@@ -175,7 +175,6 @@
 <script type=text/javascript src="{{ url_for('static', filename='bundle.min.js') }}"></script>
 <script type=text/javascript>
     $SCRIPT_ROOT = {{ request.script_root|tojson }};
-    var csrf_token = "{{ csrf_token() }}";
 </script>
 <script type=text/javascript src="{{ url_for('static', filename='enroll.js') }}"></script>
 {% endblock content2 %}

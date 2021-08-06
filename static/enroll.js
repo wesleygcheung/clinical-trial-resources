@@ -300,9 +300,9 @@ if ($("#enrollform").valid()){
         url: "/API/enrollment",
         type: "POST",
         data: JSON.stringify(finaldict),
-        headers: {
-            "X-CSRFToken": csrf_token,
-        },
+        // headers: {
+        //     "X-CSRFToken": csrf_token,
+        // },
         contentType: "application/json; charset=utf-8",
         success: function(data) { 
             if (!$('#loadingWheel').hasClass('hidden')){
