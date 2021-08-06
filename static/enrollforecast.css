@@ -96,6 +96,7 @@ button:focus {
     align-self: start;
     justify-self: start;
     margin-bottom: 2rem;
+    width: 100%;
 }
 .dashboard-bans-header{
     grid-column: 3 / 9;
@@ -170,6 +171,12 @@ button:focus {
 }
 .topButton:hover{
     transform: scale(1.1);
+}
+.downloadButton{
+    grid-column: 3 / 5;
+    grid-row: 8 / 8;
+    justify-self: start;
+    align-self: end;
 }
 .tableCell{
     padding-bottom: 0.5rem;
@@ -374,7 +381,10 @@ button:focus {
         grid-row: 1 / 1;
         align-self: start;
         justify-self: start;
-        margin-bottom: 1rem;
+        margin-bottom: 0rem;
+    }
+    .dashboard-header h2{
+        font-size: 24px;
     }
     .dashboard-bans-header{
         grid-column: 1 / 11;
@@ -492,7 +502,13 @@ button:focus {
         grid-column: 8 / 11;
         grid-row: 10 / 10;
         justify-self: center;
-        align-self: end;
+        align-self: center;
+    }
+    .downloadButton{
+        grid-column: 1 / 5;
+        grid-row: 10 / 10;
+        justify-self: start;
+        align-self: center;
     }
     .enrollmentfield{
         width: 100%;

@@ -276,7 +276,19 @@ fixedName = countryName.match(rxp).join("<br>");
 return fixedName;
 };
 
-
+var csvDownload = "Country,Date,Totaled Screened,Totaled Enrolled,\r\n";
+var encodedUri = encodeURI(csvDownload);
+function downloadCSV(){
+    var downloadLink = document.createElement("a");
+    var blob = new Blob(["\ufeff", csvDownload]);
+    var url = URL.createObjectURL(blob);
+    downloadLink.href = url;
+    downloadLink.download = "Enrollment_Forecast_Data.csv";
+    
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+};
 function compileData(){
 if ($("#enrollform").valid()){
     if ($('#loadingWheel').hasClass('hidden')){
@@ -296,6 +308,7 @@ if ($("#enrollform").valid()){
     };
     var datadict = {'Country': datadict['country'],'Start Date': datadict['startdate'], 'Stop Date': datadict['enddate'], "Screen Fail Rate": datadict['sfrate'], 'Enrollment Rate': datadict['enrollmentrate']};
     var finaldict = {'Target Enrollment': $('#targetenrollment').val(), 'Current Enrollment': $('#currentenrollment').val(), 'tableData': datadict}
+
     $.ajax({
         url: "/API/enrollment",
         type: "POST",
@@ -305,6 +318,11 @@ if ($("#enrollform").valid()){
         // },
         contentType: "application/json; charset=utf-8",
         success: function(data) { 
+            data['csv'].forEach(function(rowArray) {
+                let row = rowArray.join(",");
+                csvDownload += row + "\r\n";
+            });
+
             if (!$('#loadingWheel').hasClass('hidden')){
                 $('#loadingWheel').addClass('hidden');
             };
