@@ -313,16 +313,15 @@ if ($("#enrollform").valid()){
         url: "/API/enrollment",
         type: "POST",
         data: JSON.stringify(finaldict),
-        // headers: {
-        //     "X-CSRFToken": csrf_token,
-        // },
+        headers: {
+            "X-CSRFToken": csrf_token,
+        },
         contentType: "application/json; charset=utf-8",
         success: function(data) { 
             data['csv'].forEach(function(rowArray) {
                 let row = rowArray.join(",");
                 csvDownload += row + "\r\n";
             });
-
             if (!$('#loadingWheel').hasClass('hidden')){
                 $('#loadingWheel').addClass('hidden');
             };
@@ -342,7 +341,7 @@ if ($("#enrollform").valid()){
 
             screeningTraces = [];
             enrollTraces = [];
-            for (country of Object.keys(data['ScreeningPlot'])){
+            for (country of Object.keys(data['ScreeningPlot']).reverse()){
 
                 var screenTrace = {x: data['ScreeningPlot'][country]['Dates'], y: data['ScreeningPlot'][country]['Screeners'], name: country, stackgroup: 'one', line: {color: ''}};
                 screeningTraces.push(screenTrace);
