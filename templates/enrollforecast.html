@@ -1,6 +1,5 @@
 {% extends "layout.html" %}
 {% block header %}
-
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='enrollforecast.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js" crossorigin="anonymous"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -176,6 +175,7 @@
 <script type=text/javascript src="{{ url_for('static', filename='bundle.min.js') }}"></script>
 <script type=text/javascript>
     $SCRIPT_ROOT = {{ request.script_root|tojson }};
-  </script>
+    var csrf_token = "{{ csrf_token() }}";
+</script>
 <script type=text/javascript src="{{ url_for('static', filename='enroll.js') }}"></script>
 {% endblock content2 %}

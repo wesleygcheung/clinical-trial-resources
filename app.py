@@ -9,7 +9,7 @@ from functools import reduce
 
 ### Initialize Flask App ###
 app = Flask(__name__)
-# CSRFProtect(app)
+CSRFProtect(app)
 app.config['SECRET_KEY'] = secrets.token_urlsafe(16)
 
 ### Website Routes ###
@@ -21,7 +21,7 @@ def home():
 def enrollment():
     return render_template('enrollforecast.html')
 
-@app.route('/API/enrollment', methods=['GET','POST'])
+@app.route('/API/enrollment', methods=['POST'])
 def api_enrollment():
     data = request.get_json()
     df = pd.DataFrame.from_dict(data['tableData'])
