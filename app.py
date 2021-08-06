@@ -5,8 +5,9 @@ from functions import enrollment_forecast
 
 ### Initialize Flask App ###
 app = Flask(__name__)
-CSRFProtect(app)
 app.config['SECRET_KEY'] = secrets.token_urlsafe(16)
+CSRFProtect(app)
+
 
 ### Website Routes ###
 @app.route("/")
