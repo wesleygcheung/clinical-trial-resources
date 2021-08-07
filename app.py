@@ -13,7 +13,7 @@ def home():
 
 @app.route("/enrollment")
 def enrollment():
-    return render_template('enrollforecast.html')
+    return render_template('enrollforecast.html', title="Clinical Trial Enrollment Forecast")
 
 @app.route('/API/enrollment', methods=['POST'])
 def api_enrollment():
