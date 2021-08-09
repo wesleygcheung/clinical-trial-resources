@@ -1,0 +1,389 @@
+{% extends "layout.html" %}
+{% block header %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='sankey.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{% endblock header %}    
+{% block content2 %}
+<div class="main-grid">
+    <div class="main-section1">
+        <hr class="header-line">
+        <h2><b>Study Visit Flow Visualization</b></h2><br>
+ 
+    </div>
+    <div class="main-section2">
+        <div class="main-section2-header">
+            <hr class="header-line">
+            <h4>Step 1. Enter Study Visits or Statuses as Sankey Diagram Columns</h4>
+            <br>
+            <button class="column-button" type="button" onclick="addColumn()">Add Column</btn>
+        </div>
+        <div class="sankey-column" id="column-1">
+            <b><span id="columnheader-1">Column 1</span></b>
+            <button type="button" id="removecolumn-1" style="float:right; outline: none; border: none;background-color: rgba(0,0,0,0)" onclick="removeColumn(this.id)"><i class="fas fa-times xbutton"></i></button>
+            <div id="columninputs-1" style="margin-top: 1rem;margin-bottom: 1rem;">
+                <input class="form-control form-control-sm columninput" type="text" value="Screening" oninput="updatedFlowChoices()">
+            </div>
+            <button class="column-button" id="addrow-1" type="button" onclick="addRow(this.id)">Add Row</btn>
+            <button class="column-button" id="removerow-1" type="button" onclick="removeRow(this.id)"" style="float:right">Remove Row</btn>
+        </div>
+        <div class="sankey-column" id="column-2">
+            <b><span id="columnheader-2">Column 2</span></b>
+            <button type="button" id="removecolumn-2" style="float:right; outline: none; border: none;background-color: rgba(0,0,0,0)" onclick="removeColumn(this.id)"><i class="fas fa-times xbutton"></i></button>
+            <div id="columninputs-2" style="margin-top: 1rem;margin-bottom: 1rem;">
+                <input class="form-control form-control-sm columninput" type="text" value="Randomized" oninput="updatedFlowChoices()">
+                <input class="form-control form-control-sm columninput" type="text" value="Screen Failure" oninput="updatedFlowChoices()">
+            </div>
+            <button class="column-button" id="addrow-2" type="button" onclick="addRow(this.id)">Add Row</btn>
+            <button class="column-button" id="removerow-2" type="button" onclick="removeRow(this.id)"" style="float:right">Remove Row</btn>
+        </div>
+        <div class="sankey-column" id="column-3">
+            <b><span id="columnheader-3">Column 3</span></b>
+            <button type="button" id="removecolumn-3" style="float:right; outline: none; border: none;background-color: rgba(0,0,0,0)" onclick="removeColumn(this.id)"><i class="fas fa-times xbutton"></i></button>
+            <div id="columninputs-3" style="margin-top: 1rem;margin-bottom: 1rem;">
+                <input class="form-control form-control-sm columninput" type="text" value="Active" oninput="updatedFlowChoices()">
+                <input class="form-control form-control-sm columninput" type="text" value="Early Terminated" oninput="updatedFlowChoices()">
+            </div>
+            <button class="column-button" id="addrow-3" type="button" onclick="addRow(this.id)">Add Row</btn>
+            <button class="column-button" id="removerow-3" type="button" onclick="removeRow(this.id)"" style="float:right">Remove Row</btn>
+        </div>
+    </div>
+    <div class="main-section3" id="section3">
+        <div class="main-section3-header">
+            <hr class="header-line">
+            <h4>Step 2. Enter Flow of Subjects Between Study Visits/Statuses</h4>
+            <br>
+            <button class="column-button" type="button" onclick="addFlow()">Add Flow</btn>
+        </div><br>
+        <div class="flow-column" id="flowcolumn-1">
+            <b><span id="flowheader-1">Flow 1</span></b>
+            <button type="button" id="removeflow-1" style="float:right; outline: none; border: none;background-color: rgba(0,0,0,0)" onclick="removeFlow(this.id)"><i class="fas fa-times xbutton"></i></button>
+            <div style="margin-top: 1rem;">
+                From
+                <select id="flowFrom-1" class="form-control form-control-sm flowinput-from" onchange="updateToChoices(this.id,this.value)">
+                    <option value="Screening">Screening</option>
+                    <option value="Randomized">Randomized</option>
+                    <option value="Screen Failure">Screen Failure</option>
+                </select>
+            </div>
+            <div>
+                To
+                <select id="flowTo-1" class="form-control form-control-sm flowinput-to">
+                    <option value="Randomized" selected>Randomized</option>
+                    <option value="Screen Failure">Screen Failure</option>
+                    <option value="Active">Active</option>
+                    <option value="Early Terminated">Early Terminated</option>
+                </select>
+            </div>
+            <div>
+                # Subjects
+                <input id="flowCount-1" class="form-control form-control-sm flowinput-total" type="number" min="0" value="80">
+            </div>
+        </div>
+        <div class="flow-column" id="flowcolumn-2">
+            <b><span id="flowheader-2">Flow 2</span></b>
+            <button type="button" id="removeflow-2" style="float:right; outline: none; border: none;background-color: rgba(0,0,0,0)" onclick="removeFlow(this.id)"><i class="fas fa-times xbutton"></i></button>
+            <div style="margin-top: 1rem;">
+                From
+                <select id="flowFrom-2" class="form-control form-control-sm flowinput-from" onchange="updateToChoices(this.id,this.value)">
+                    <option value="Screening">Screening</option>
+                    <option value="Randomized">Randomized</option>
+                    <option value="Screen Failure">Screen Failure</option>
+                </select>
+            </div>
+            <div>
+                To
+                <select id="flowTo-2" class="form-control form-control-sm flowinput-to">
+                    <option value="Randomized">Randomized</option>
+                    <option value="Screen Failure" selected>Screen Failure</option>
+                    <option value="Active">Active</option>
+                    <option value="Early Terminated">Early Terminated</option>
+                </select>
+            </div>
+            <div>
+                # Subjects
+                <input id="flowCount-2" class="form-control form-control-sm flowinput-total" type="number" min="0" value="20">
+            </div>
+        </div>
+        <div class="flow-column" id="flowcolumn-3">
+            <b><span id="flowheader-3">Flow 3</span></b>
+            <button type="button" id="removeflow-3" style="float:right; outline: none; border: none;background-color: rgba(0,0,0,0)" onclick="removeFlow(this.id)"><i class="fas fa-times xbutton"></i></button>
+            <div style="margin-top: 1rem;">
+                From
+                <select id="flowFrom-3" class="form-control form-control-sm flowinput-from" onchange="updateToChoices(this.id,this.value)">
+                    <option value="Screening">Screening</option>
+                    <option value="Randomized" selected>Randomized</option>
+                    <option value="Screen Failure">Screen Failure</option>
+                </select>
+            </div>
+            <div>
+                To
+                <select id="flowTo-3" class="form-control form-control-sm flowinput-to">
+                    <option value="Active" selected>Active</option>
+                    <option value="Early Terminated">Early Terminated</option>
+                </select>
+            </div>
+            <div>
+                # Subjects
+                <input id="flowCount-3" class="form-control form-control-sm flowinput-total" type="number" min="0" value="60">
+            </div>
+        </div>
+        <div class="flow-column" id="flowcolumn-4">
+            <b><span id="flowheader-4">Flow 4</span></b>
+            <button type="button" id="removeflow-4" style="float:right; outline: none; border: none;background-color: rgba(0,0,0,0)" onclick="removeFlow(this.id)"><i class="fas fa-times xbutton"></i></button>
+            <div style="margin-top: 1rem;">
+                From
+                <select id="flowFrom-4" class="form-control form-control-sm flowinput-from" onchange="updateToChoices(this.id,this.value)">
+                    <option value="Screening">Screening</option>
+                    <option value="Randomized" selected>Randomized</option>
+                    <option value="Screen Failure">Screen Failure</option>
+                </select>
+            </div>
+            <div>
+                To
+                <select id="flowTo-4" class="form-control form-control-sm flowinput-to">
+                    <option value="Active">Active</option>
+                    <option value="Early Terminated" selected>Early Terminated</option>
+                </select>
+            </div>
+            <div>
+                # Subjects
+                <input id="flowCount-4" class="form-control form-control-sm flowinput-total" type="number" min="0" value="20">
+            </div>
+        </div>
+    </div>
+    <div class="main-section4" id="section4">
+        <div class="main-section4-header">
+            <hr class="header-line">
+            <h2><b>Sankey Diagram</b></h2>
+        </div>
+        <div class="sankey-plot" id="sankeyPlot">
+            
+        </div>
+    </div>
+</div>
+<script type=text/javascript src="{{ url_for('static', filename='bundle.min.js') }}"></script>
+<script type=text/javascript>
+    $SCRIPT_ROOT = {{ request.script_root|tojson }};
+</script>
+<script>
+    var data = {
+        type: "sankey",
+        orientation: "h",
+        node: {
+            pad: 15,
+            thickness: 30,
+            line: {
+                color: "black",
+                width: 0.5
+            },
+            label: ["Screening: 100", "Randomized: 80", "Screen Failure: 20", "Active: 60", "Early Terminated: 20"],
+            color: ["blue", "blue", "blue", "blue", "blue"],
+            x: [0.1,0.5,0.5,0.9,0.9],
+            y: [0.5,0.4,0.9,0.3,0.7],
+            },
+
+        link: {
+            source: [0,0,1,1],
+            target: [1,2,3,4],
+            value:  [80,20,60,20]
+        }
+    };
+
+    var data = [data]
+
+    var layout = {
+    title: "Basic Sankey",
+    font: {
+        size: 10
+    }
+    }
+
+    Plotly.react('sankeyPlot', data, layout)
+
+
+    function addColumn(){
+        var columnCount = String(document.getElementsByClassName('sankey-column').length+1);
+        $('.main-section2').append(`
+            <div class="sankey-column" id="column-`+columnCount+`">
+                <b><span id="columnheader-`+columnCount+`">Column `+columnCount+`</span></b>
+                <button type="button" id="removecolumn-`+columnCount+`" style="float:right; outline: none; border: none;background-color: rgba(0,0,0,0)" onclick="removeColumn(this.id)"><i class="fas fa-times xbutton"></i></button>
+                <div id="columninputs-`+columnCount+`" style="margin-top: 1rem;margin-bottom: 1rem;">
+                    <input class="form-control form-control-sm columninput" type="text" oninput="updatedFlowChoices()">
+                </div>
+                <button class="column-button" id="addrow-`+columnCount+`" type="button" onclick="addRow(this.id)">Add Row</btn>
+                <button class="column-button" id="removerow-`+columnCount+`" type="button" onclick="removeRow(this.id)"" style="float:right">Remove Row</btn>
+            </div>
+        `);
+        updatedFlowChoices();
+    };
+    function addRow(id){
+        var columnId = "columninputs-"+id.split("-").pop();
+        $('#'+columnId).append('<input class="form-control form-control-sm column-input" type="text" oninput="updatedFlowChoices()">');
+    };
+    function removeRow(id){
+        var columnId = "columninputs-"+id.split("-").pop();
+        var columnIdLength = document.getElementById(columnId).getElementsByTagName('input').length;
+        if (columnIdLength > 1){
+            $("[id='"+columnId+"'").children().last().remove();
+        };
+        updatedFlowChoices();
+    };
+    function removeColumn(id){
+        var numberOfColumns = $('.sankey-column').length;
+        if (numberOfColumns > 2){
+            var removedColumnId = id.split("-").pop();
+            var removedColumnIdInt = parseInt(removedColumnId);
+            document.getElementById("column-"+removedColumnId).remove();
+            $('.sankey-column').each(function(i, obj) {
+            var columnId = parseInt(obj.id.split("-").pop());
+                if (columnId > removedColumnIdInt){
+                    var newColumnId = columnId - 1;
+                    $("[id='columnheader-"+String(columnId)+"'").text('Column '+String(newColumnId));
+                    $("[id='columnheader-"+String(columnId)+"'").attr('id','columnheader-'+String(newColumnId));
+                    $("[id='column-"+String(columnId)+"'").attr('id','column-'+String(newColumnId));
+                    $("[id='removecolumn-"+String(columnId)+"'").attr('id','removecolumn-'+String(newColumnId));
+                    $("[id='columninputs-"+String(columnId)+"'").attr('id','columninputs-'+String(newColumnId));
+                    $("[id='addrow-"+String(columnId)+"'").attr('id','addrow-'+String(newColumnId));
+                    $("[id='removerow-"+String(columnId)+"'").attr('id','removerow-'+String(newColumnId));
+                }
+            });
+        };
+        updatedFlowChoices();
+    };
+    function removeFlow(id){
+        var numberOfFlows = $('.flow-column').length;
+        if (numberOfFlows > 1){
+            var removedFlowId = id.split("-").pop();
+            var removedFlowIdInt = parseInt(removedFlowId);
+            $("[id='flowcolumn-"+removedFlowId+"'").remove();
+            $('.flow-column').each(function(i, obj) {
+            var flowId = parseInt(obj.id.split("-").pop());
+                if (flowId > removedFlowIdInt){
+                    var newFlowId = flowId - 1;
+                    $("[id='flowheader-"+String(flowId)+"'").text('Flow '+String(newFlowId));
+                    $("[id='flowheader-"+String(flowId)+"'").attr('id','flowheader-'+String(newFlowId));
+                    $("[id='flowcolumn-"+String(flowId)+"'").attr('id','flowcolumn-'+String(newFlowId));
+                    $("[id='removeflow-"+String(flowId)+"'").attr('id','removeflow-'+String(newFlowId));
+                }
+            });
+        }
+    };
+    function addFlow(){
+        var flowCount = String(document.getElementsByClassName('flow-column').length+1);
+        $('.main-section3').append(`
+            <div class="flow-column" id="flowcolumn-`+flowCount+`">
+                <b><span id="flowheader-`+flowCount+`">Flow `+flowCount+`</span></b>
+                <button type="button" id="removeflow-`+flowCount+`" style="float:right; outline: none; border: none;background-color: rgba(0,0,0,0)" onclick="removeFlow(this.id)"><i class="fas fa-times xbutton"></i></button>
+                <div style="margin-top: 1rem;">
+                    From
+                    <select id="flowFrom-`+flowCount+`" class="form-control form-control-sm flowinput-from" onchange="updateToChoices(this.id,this.value)">
+                        `+fromChoicesText+`
+                    </select>
+                </div>
+                <div>
+                    To
+                    <select id="flowTo-`+flowCount+`" class="form-control form-control-sm flowinput-to">
+                        `+toChoicesText+`
+                    </select>
+                </div>
+                <div>
+                    # Subjects
+                    <input id="flowCount-`+flowCount+`" class="form-control form-control-sm flowinput-total" type="number" min="0">
+                </div>
+            </div>
+        `);
+    }
+    var fromChoices = [];
+    var fromChoicesText = '<option value="Screening">Screening</option><option value="Randomized">Randomized</option><option value="Screen Failure">Screen Failure</option>';
+    var toChoicesText = '<option value="Randomized">Randomized</option><option value="Screen Failure">Screen Failure</option><option value="Active">Active</option><option value="Early Terminated">Early Terminated</option>';
+
+    function updatedFlowChoices(){
+        var numberOfColumns = $('.sankey-column').length;
+        fromChoices = [];
+        fromChoicesText = "";
+        $('.sankey-column').each(function(i, obj) {
+            var columnId = parseInt(obj.id.split("-").pop());
+            if (columnId < numberOfColumns){
+                $('#columninputs-'+columnId+' input').each(function () {
+                    fromChoices.push(this.value);
+                });
+            }
+        });
+        var flowFromDropdowns = document.getElementsByClassName("flowinput-from");
+        for (flow of flowFromDropdowns){
+            flow.options.length = 0;
+        }
+        for (choice of fromChoices){
+            $(".flowinput-from").append('<option value="'+choice+'">'+choice+'</option>');
+            fromChoicesText = fromChoicesText.concat('<option value="'+choice+'">'+choice+'</option>');
+        }
+
+        $('.flowinput-to').each(function(i, obj) {
+            obj.options.length = 0;
+            var toChoices = [];
+            var flowId = obj.id.split("-").pop();
+            var flowFromValue = $('#flowFrom-'+flowId).val();
+            var fromColumn = [];
+            $('.sankey-column').each(function(i, obj) {
+                var columnId = parseInt(obj.id.split("-").pop());
+                $('#columninputs-'+columnId+' input').each(function () {
+                    if (this.value == flowFromValue){
+                        fromColumn = columnId;
+                    }
+                });
+            });
+            $('.sankey-column').each(function(i, obj) {
+                var columnId = parseInt(obj.id.split("-").pop());
+                if (columnId > fromColumn){
+                    $('#columninputs-'+columnId+' input').each(function () {
+                        toChoices.push(this.value);
+                    });
+                }
+            });
+            for (choice of toChoices){
+                $(obj).append('<option value="'+choice+'">'+choice+'</option>');
+            };
+        });
+        var toChoices = [];
+        toChoicesText = '';
+        $('.sankey-column').each(function(i, obj) {
+            var columnId = parseInt(obj.id.split("-").pop());
+            if (columnId > 1){
+                $('#columninputs-'+columnId+' input').each(function () {
+                    toChoices.push(this.value);
+                });
+            }
+        });
+        for (choice of toChoices){
+            toChoicesText = toChoicesText.concat('<option value="'+choice+'">'+choice+'</option>');
+        }
+    };
+    function updateToChoices(id, value){
+        var id = id.split("-").pop();
+        var toChoices = [];
+        var fromColumn = [];
+        $('.sankey-column').each(function(i, obj) {
+            var columnId = parseInt(obj.id.split("-").pop());
+            $('#columninputs-'+columnId+' input').each(function () {
+                if (this.value == value){
+                    fromColumn = columnId;
+                }
+            });
+        });
+        $('.sankey-column').each(function(i, obj) {
+            var columnId = parseInt(obj.id.split("-").pop());
+            if (columnId > fromColumn){
+                $('#columninputs-'+columnId+' input').each(function () {
+                    toChoices.push(this.value);
+                });
+            }
+        });
+        var toDropDown = document.getElementById('flowTo-'+id);
+        toDropDown.options.length = 0;
+        for (choice of toChoices){
+            $("[id='flowTo-"+id).append('<option value="'+choice+'">'+choice+'</option>');
+        };
+    };
+</script>
+{% endblock content2 %}

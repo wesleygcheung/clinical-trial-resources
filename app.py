@@ -20,6 +20,10 @@ def api_enrollment():
     data = request.get_json()
     plotlyData = enrollment_forecast(data)
     return jsonify(plotlyData)
-    
+
+@app.route("/visit-visualization")
+def sankey():
+    return render_template('sankey.html', title="Study Visit Visualization")
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
