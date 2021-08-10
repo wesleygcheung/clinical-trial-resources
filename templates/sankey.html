@@ -53,7 +53,7 @@
             <hr class="header-line">
             <h4>Step 2. Enter Flow of Subjects Between Study Visits/Statuses</h4>
             <br>
-            <button class="column-button" type="button" onclick="addFlow()">Add Flow</btn>
+            <button class="column-button" type="button" onclick="updateSankey()">Add Flow</btn>
         </div><br>
         <div class="flow-column" id="flowcolumn-1">
             <b><span id="flowheader-1">Flow 1</span></b>
@@ -167,7 +167,7 @@
     $SCRIPT_ROOT = {{ request.script_root|tojson }};
 </script>
 <script>
-    var data = {
+    var data = [{
         type: "sankey",
         orientation: "h",
         node: {
@@ -181,6 +181,7 @@
             color: ["blue", "blue", "blue", "blue", "blue"],
             x: [0.1,0.5,0.5,0.9,0.9],
             y: [0.5,0.4,0.9,0.3,0.7],
+            pad: 10,
             },
 
         link: {
@@ -188,9 +189,10 @@
             target: [1,2,3,4],
             value:  [80,20,60,20]
         }
-    };
+    }];
 
-    var data = [data]
+
+
 
     var layout = {
     title: "Basic Sankey",
@@ -200,6 +202,129 @@
     }
 
     Plotly.react('sankeyPlot', data, layout)
+
+    var sankeyArray = [];
+
+    var sankeyLabels = [];
+
+    var sankeyX = [];
+
+    var sankeyY = [];
+
+    var sankeySource = [];
+    
+    var sankeyTarget = [];
+
+    var sankeyValue = [];
+
+    function updateSankey(){
+        sankeyArray = [];
+        sankeyLabels = [];
+        sankeyX = [];
+        sankeY = [];
+        sankeySource = [];
+        sankeyTarget = [];
+        sankeyValue = [];
+        var numberOfColumns = $('.sankey-column').length;
+        $('.sankey-column').each(function(i, obj) {
+            var columnId = parseInt(obj.id.split("-").pop());
+            $('#columninputs-'+columnId+' input').each(function () {
+                var totalSubjects = 0;
+                var labelValue = this.value
+                if (columnId != 1){
+                    $('.flowinput-to').each(function(j, obj2){
+                        if (obj2.value == labelValue){
+                            var flowId = obj2.id.split("-").pop();
+                            var subTotalSubjects = parseInt($('#flowCount-'+flowId).val());
+                            totalSubjects += subTotalSubjects;
+                        }
+                    });
+                } else{
+                    $('.flowinput-from').each(function(j, obj2){
+                        if (obj2.value == labelValue){
+                            var flowId = obj2.id.split("-").pop();
+                            var subTotalSubjects = parseInt($('#flowCount-'+flowId).val());
+                            totalSubjects += subTotalSubjects;
+                        }
+                    });
+                }
+                var sankeySubLabel = [labelValue, columnId, totalSubjects, labelValue + ": " + String(totalSubjects)];
+                sankeyArray.push(sankeySubLabel);
+            });
+        });
+        sankeyArray.sort(function(a, b) {
+            if (a[1] == b[1]) {
+                return b[2] - a[2];
+            }
+            return a[1] - b[1];
+        });
+        for (array of sankeyArray){
+            sankeyLabels.push(array[3]);
+        }
+        var sankeyLabelSteps = parseFloat(1.0 / (numberOfColumns-1));
+        for (label of sankeyLabels){
+            for (array of sankeyArray){
+                if (array[3] == label){
+                    sankeyX.push(parseFloat(((parseFloat(array[1])-1)*sankeyLabelSteps).toFixed(2)));
+                }
+            }
+        }
+        var columnTotals = [];
+        for (let column = 1; column <=numberOfColumns; column++){
+            var columnTotal = 0;
+            for (array of sankeyArray){
+                if (array[1] == column){
+                    columnTotal += array[2];
+                } 
+            }
+            columnTotals.push(columnTotal);
+        }
+        var maxTotalSubjects = Math.max(...columnTotals);
+        for (let column = 1; column <=numberOfColumns; column++){
+            var columnTotalSubjects = 0;
+            for (array of sankeyArray){
+                if (array[1] == column){
+                    columnTotalSubjects += parseFloat(array[2]);
+                } 
+            }
+            var columnRatio = (columnTotalSubjects / maxTotalSubjects).toFixed(2);
+            var columnBlock = 0;
+            for (array of sankeyArray){
+                if (array[1] == column){
+                    var itemValue = parseFloat(array[2]);
+                    var itemRatio = (itemValue / columnTotalSubjects);
+                    var itemPosition = parseFloat((columnRatio * itemRatio / 2).toFixed(2));
+                    var itemPositionNormalized = columnBlock + itemPosition;
+                    sankeyY.push(itemPositionNormalized);
+                    columnBlock = parseFloat((itemRatio * columnRatio).toFixed(2));
+                }
+            }
+        }
+        $('.flow-column').each(function(i, obj) {
+            var flowId = obj.id.split("-").pop();
+            var fromVisitName = $('#flowFrom-'+flowId).val();
+            var toVisitName = $('#flowTo-'+flowId).val();
+            for (array in sankeyArray){
+                if (sankeyArray[array][0] == fromVisitName){
+                    sankeySource.push(array);
+                };
+                if (sankeyArray[array][0] == toVisitName){
+                    sankeyTarget.push(array);
+                };
+            }
+            sankeyValue.push($('#flowCount-'+flowId).val());
+        });
+        data[0]['node']['label'] = sankeyLabels;
+        data[0]['node']['x'] = sankeyX;
+        data[0]['node']['y'] = sankeyY;
+        data[0]['link']['source'] = sankeySource;
+        data[0]['link']['target'] = sankeyTarget;
+        data[0]['link']['value'] = sankeyValue;
+        Plotly.react('sankeyPlot', data, layout)
+    };
+
+    updateSankey();
+
 
 
     function addColumn(){
@@ -385,5 +510,6 @@
             $("[id='flowTo-"+id).append('<option value="'+choice+'">'+choice+'</option>');
         };
     };
+
 </script>
 {% endblock content2 %}
