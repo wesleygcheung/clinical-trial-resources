@@ -53,7 +53,7 @@
             <hr class="header-line">
             <h4>Step 2. Enter Flow of Subjects Between Study Visits/Statuses</h4>
             <br>
-            <button class="column-button" type="button" onclick="updateSankey()">Add Flow</btn>
+            <button class="column-button" type="button" onclick="addFlow()">Add Flow</btn>
         </div><br>
         <div class="flow-column" id="flowcolumn-1">
             <b><span id="flowheader-1">Flow 1</span></b>
@@ -156,6 +156,8 @@
         <div class="main-section4-header">
             <hr class="header-line">
             <h2><b>Sankey Diagram</b></h2>
+            <br>
+            <button class="column-button" type="button" onclick="updateSankey()">Update Chart</btn>
         </div>
         <div class="sankey-plot" id="sankeyPlot">
             
@@ -201,8 +203,6 @@
     }
     }
 
-    Plotly.react('sankeyPlot', data, layout)
-
     var sankeyArray = [];
 
     var sankeyLabels = [];
@@ -221,7 +221,7 @@
         sankeyArray = [];
         sankeyLabels = [];
         sankeyX = [];
-        sankeY = [];
+        sankeyY = [];
         sankeySource = [];
         sankeyTarget = [];
         sankeyValue = [];
