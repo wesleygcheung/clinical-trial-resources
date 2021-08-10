@@ -296,7 +296,7 @@
                     var itemPosition = parseFloat((columnRatio * itemRatio / 2).toFixed(2));
                     var itemPositionNormalized = columnBlock + itemPosition;
                     sankeyY.push(itemPositionNormalized);
-                    columnBlock = parseFloat((itemRatio * columnRatio).toFixed(2));
+                    columnBlock += parseFloat((itemRatio * columnRatio).toFixed(2));
                 }
             }
         }
