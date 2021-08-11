@@ -49,7 +49,7 @@ button:focus {
     box-shadow: 3px 3px 6px #b9b9b9;
     transition: transform ease 250ms;
 }
-.column-button{
+.section-button{
     background-color: var(--button-color);
     border-radius: 5px;
     border: none;
@@ -59,8 +59,33 @@ button:focus {
     padding: 0.50em;
     outline: none;
 }
-.column-button:hover{
+.section-button:hover{
     background-color: var(--button-color-hover);
+}
+.column-button{
+    font-size: 16px;
+    background-color: #ffffff;
+    border-style: solid;
+    border-width: 0.5px;
+    border-color: #b6b6b6;
+    border-radius: 8px;
+    padding: 0.5rem;
+    transition: transform ease 250ms;
+    cursor: pointer;
+}
+.column-button:hover{
+    transform: scale(1.05);
+}
+.column-button:focus {
+    font-size: 16px;
+    background-color: #ffffff;
+    border-style: solid;
+    border-width: 0.5px;
+    border-color: #b6b6b6;
+    border-radius: 8px;
+    padding: 0.5rem;
+    transition: transform ease 250ms;
+    cursor: pointer;
 }
 .main-section3{
     grid-column: 3 / 9;

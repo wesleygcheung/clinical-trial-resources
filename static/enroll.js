@@ -257,11 +257,11 @@ if ($("#enrollform").valid()){
             for (plot of Object.keys(horizBarPlots)){
                 for (country in data[plot]){
                     horizBarPlots[plot][0]['x'].push(data[plot][country][1]);
-                    horizBarPlots[plot][0]['y'].push('<b>'+countryRegex(data[plot][country][0])+'</b>');
+                    horizBarPlots[plot][0]['y'].push(countryRegex(data[plot][country][0]));
                     if (plot == 'Screen Fail Rate'){
-                        horizBarPlots[plot][0]['text'].push('<b>'+String(data[plot][country][1])+'%</b>');
+                        horizBarPlots[plot][0]['text'].push(String(data[plot][country][1])+'%');
                     } else{
-                        horizBarPlots[plot][0]['text'].push('<b>'+String(data[plot][country][1])+'</b>');
+                        horizBarPlots[plot][0]['text'].push(String(data[plot][country][1]));
                     };
                 };
                 horizBarPlots[plot][1]['xaxis']['range'] = [0,(Math.max(...horizBarPlots[plot][0]['x'])*1.20)];
@@ -299,6 +299,11 @@ var boxConfig = {responsive: true, displayModeBar: false};
 // Area chart layout settings
 var overTimePlotLayout = {
 showlegend: true,
+font: {
+    family: 'Roboto',
+    size: 16,
+    color: '#000000',
+},
 legend: {"orientation": "h"},
 plot_bgcolor: 'rgba(0,0,0,0)',
 paper_bgcolor: 'rgba(0,0,0,0)',
@@ -412,8 +417,8 @@ margin: {
     pad: 0,	
 },
 font: {
-    family: 'Montserrat',
-    size: 12,
+    family: 'Roboto',
+    size: 16,
     color: '#00000',
 },
 xaxis: {
@@ -448,8 +453,8 @@ margin: {
     pad: 0,	
 },
 font: {
-    family: 'Montserrat',
-    size: 12,
+    family: 'Roboto',
+    size: 16,
     color: '#00000',
 },
 xaxis: {
@@ -484,8 +489,8 @@ margin: {
     pad: 0,	
 },
 font: {
-    family: 'Montserrat',
-    size: 12,
+    family: 'Roboto',
+    size: 16,
     color: '#00000',
 },
 xaxis: {
@@ -520,8 +525,8 @@ margin: {
     pad: 0,	
 },
 font: {
-    family: 'Montserrat',
-    size: 12,
+    family: 'Roboto',
+    size: 16,
     color: '#00000',
 },
 xaxis: {

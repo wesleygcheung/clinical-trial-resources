@@ -37,7 +37,7 @@ button:focus {
     align-self: center;
     text-align: left;
     z-index: 3;
-    font-weight: 600;
+    font-weight: 400;
 }
 .header-text{
     line-height: 2rem;
