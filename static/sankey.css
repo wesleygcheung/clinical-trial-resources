@@ -43,6 +43,11 @@ button:focus {
     width: 1fr;
     grid-column: auto;
     grid-row: auto;
+    border-style: none;
+    border-radius: 20px;
+    padding: 1rem;
+    box-shadow: 3px 3px 6px #b9b9b9;
+    transition: transform ease 250ms;
 }
 .column-button{
     background-color: var(--button-color);
@@ -76,16 +81,55 @@ button:focus {
     grid-row: 1 / 1;
 }
 .main-section4{
-    grid-column: 1 / 11;
+    grid-column: 3 / 9;
     grid-row: 4 / 4;
+    margin-top: 2rem;
+    width: 100%;
+}
+.main-section4-header{
+    margin-bottom: 2rem;
+}
+.main-section4-data{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+    grid-auto-flow: row;
+    width: 100%;
+    column-gap: 1rem;
+    row-gap: 0.5rem;
+}
+.chartTitle{
+    grid-column: 1 / 4;
+    grid-row: 1 / 1;
+    width: 100%;
+}
+.chartTitleSize{
+    grid-column: 1 / 2;
+    grid-row: 2 / 2;
+}
+.chartTitleColor{
+    grid-column: 2 / 3;
+    grid-row: 2 / 2;
+}
+.chartLabelSize{
+    grid-column: 3 / 4;
+    grid-row: 2 / 2;
+}
+.chartBgColor{
+    grid-column: 1 / 2;
+    grid-row: 3 / 3;
+}
+.main-section5{
+    grid-column: 1 / 11;
+    grid-row: 5 / 5;
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: auto;
     grid-auto-flow: row;
     width: 100%;
-    margin-top: 5rem;
+    margin-top: 2rem;
 }
-.main-section4-header{
+.main-section5-header{
     grid-column: 3 / 9;
     grid-row: 1 / 1;
     align-self: start;
@@ -97,19 +141,50 @@ button:focus {
     width: 1fr;
     grid-column: auto;
     grid-row: auto;
+    border-style: none;
+    border-radius: 20px;
+    padding: 1rem;
+    box-shadow: 3px 3px 6px #b9b9b9;
+    transition: transform ease 250ms;
 }
 .sankey-plot{
-    grid-column: 3 / 9;
+    grid-column: 2 / 10;
     grid-row: 2 / 2;
     align-self: start;
     justify-self: start;
     margin-bottom: 2rem;
     width: 100%;
+    min-height: 75vh;
 }
 .hidden{
     display: none;
 }
-
+.columninput{
+    max-width: 80%;
+    display: inline-block;
+}
+.colorinput{
+    max-width: 20%;
+    display: inline-block;
+}
+.topButton{
+    grid-column: 8 / 9;
+    grid-row: 6 / 6;
+    justify-self: center;
+    align-self: end;
+    border-style: none;
+    border-radius: 20px;
+    padding: 1rem;
+    box-shadow: 3px 3px 6px #b9b9b9;
+    transition: transform ease 250ms;
+    cursor: pointer;
+}
+.topButton:hover{
+    transform: scale(1.1);
+}
+.marginbottom{
+    margin-bottom: 1rem;
+}
 @media screen and (max-width: 480px) {
     .main-grid{
         display: grid;

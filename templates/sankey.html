@@ -6,7 +6,7 @@
 {% endblock header %}    
 {% block content2 %}
 <div class="main-grid">
-    <div class="main-section1">
+    <div class="main-section1" id="section1">
         <hr class="header-line">
         <h2><b>Study Visit Flow Visualization</b></h2><br>
  
@@ -14,7 +14,7 @@
     <div class="main-section2">
         <div class="main-section2-header">
             <hr class="header-line">
-            <h4>Step 1. Enter Study Visits or Statuses as Sankey Diagram Columns</h4>
+            <h4>Step 1. Enter Study Visits as Sankey Diagram Columns</h4>
             <br>
             <button class="column-button" type="button" onclick="addColumn()">Add Column</btn>
         </div>
@@ -23,6 +23,7 @@
             <button type="button" id="removecolumn-1" style="float:right; outline: none; border: none;background-color: rgba(0,0,0,0)" onclick="removeColumn(this.id)"><i class="fas fa-times xbutton"></i></button>
             <div id="columninputs-1" style="margin-top: 1rem;margin-bottom: 1rem;">
                 <input class="form-control form-control-sm columninput" type="text" value="Screening" oninput="updatedFlowChoices()">
+                <input class="colorinput" type="color" value="#457CD3">
             </div>
             <button class="column-button" id="addrow-1" type="button" onclick="addRow(this.id)">Add Row</btn>
             <button class="column-button" id="removerow-1" type="button" onclick="removeRow(this.id)"" style="float:right">Remove Row</btn>
@@ -32,7 +33,9 @@
             <button type="button" id="removecolumn-2" style="float:right; outline: none; border: none;background-color: rgba(0,0,0,0)" onclick="removeColumn(this.id)"><i class="fas fa-times xbutton"></i></button>
             <div id="columninputs-2" style="margin-top: 1rem;margin-bottom: 1rem;">
                 <input class="form-control form-control-sm columninput" type="text" value="Randomized" oninput="updatedFlowChoices()">
+                <input class="colorinput" type="color" value="#2E846C">
                 <input class="form-control form-control-sm columninput" type="text" value="Screen Failure" oninput="updatedFlowChoices()">
+                <input class="colorinput" type="color" value="#D91212">
             </div>
             <button class="column-button" id="addrow-2" type="button" onclick="addRow(this.id)">Add Row</btn>
             <button class="column-button" id="removerow-2" type="button" onclick="removeRow(this.id)"" style="float:right">Remove Row</btn>
@@ -42,7 +45,9 @@
             <button type="button" id="removecolumn-3" style="float:right; outline: none; border: none;background-color: rgba(0,0,0,0)" onclick="removeColumn(this.id)"><i class="fas fa-times xbutton"></i></button>
             <div id="columninputs-3" style="margin-top: 1rem;margin-bottom: 1rem;">
                 <input class="form-control form-control-sm columninput" type="text" value="Active" oninput="updatedFlowChoices()">
+                <input class="colorinput" type="color" value="#A68CEE">
                 <input class="form-control form-control-sm columninput" type="text" value="Early Terminated" oninput="updatedFlowChoices()">
+                <input class="colorinput" type="color" value="#FF7033">
             </div>
             <button class="column-button" id="addrow-3" type="button" onclick="addRow(this.id)">Add Row</btn>
             <button class="column-button" id="removerow-3" type="button" onclick="removeRow(this.id)"" style="float:right">Remove Row</btn>
@@ -51,14 +56,14 @@
     <div class="main-section3" id="section3">
         <div class="main-section3-header">
             <hr class="header-line">
-            <h4>Step 2. Enter Flow of Subjects Between Study Visits/Statuses</h4>
+            <h4>Step 2. Add Flow of Subjects Between Study Visits</h4>
             <br>
             <button class="column-button" type="button" onclick="addFlow()">Add Flow</btn>
         </div><br>
         <div class="flow-column" id="flowcolumn-1">
             <b><span id="flowheader-1">Flow 1</span></b>
             <button type="button" id="removeflow-1" style="float:right; outline: none; border: none;background-color: rgba(0,0,0,0)" onclick="removeFlow(this.id)"><i class="fas fa-times xbutton"></i></button>
-            <div style="margin-top: 1rem;">
+            <div class="marginbottom" style="margin-top: 1rem;">
                 From
                 <select id="flowFrom-1" class="form-control form-control-sm flowinput-from" onchange="updateToChoices(this.id,this.value)">
                     <option value="Screening">Screening</option>
@@ -66,7 +71,7 @@
                     <option value="Screen Failure">Screen Failure</option>
                 </select>
             </div>
-            <div>
+            <div class="marginbottom">
                 To
                 <select id="flowTo-1" class="form-control form-control-sm flowinput-to">
                     <option value="Randomized" selected>Randomized</option>
@@ -75,15 +80,19 @@
                     <option value="Early Terminated">Early Terminated</option>
                 </select>
             </div>
-            <div>
+            <div class="marginbottom">
                 # Subjects
                 <input id="flowCount-1" class="form-control form-control-sm flowinput-total" type="number" min="0" value="80">
+            </div>
+            <div>
+                Color:
+                <input id="flowColor-1" class="flowinput-color" type="color" value="#F2F2F2" style="float:right;">
             </div>
         </div>
         <div class="flow-column" id="flowcolumn-2">
             <b><span id="flowheader-2">Flow 2</span></b>
             <button type="button" id="removeflow-2" style="float:right; outline: none; border: none;background-color: rgba(0,0,0,0)" onclick="removeFlow(this.id)"><i class="fas fa-times xbutton"></i></button>
-            <div style="margin-top: 1rem;">
+            <div class="marginbottom" style="margin-top: 1rem;">
                 From
                 <select id="flowFrom-2" class="form-control form-control-sm flowinput-from" onchange="updateToChoices(this.id,this.value)">
                     <option value="Screening">Screening</option>
@@ -91,7 +100,7 @@
                     <option value="Screen Failure">Screen Failure</option>
                 </select>
             </div>
-            <div>
+            <div class="marginbottom">
                 To
                 <select id="flowTo-2" class="form-control form-control-sm flowinput-to">
                     <option value="Randomized">Randomized</option>
@@ -100,15 +109,19 @@
                     <option value="Early Terminated">Early Terminated</option>
                 </select>
             </div>
-            <div>
+            <div class="marginbottom">
                 # Subjects
                 <input id="flowCount-2" class="form-control form-control-sm flowinput-total" type="number" min="0" value="20">
+            </div>
+            <div>
+                Color:
+                <input id="flowColor-2" class="flowinput-color" type="color" value="#F2F2F2" style="float:right;">
             </div>
         </div>
         <div class="flow-column" id="flowcolumn-3">
             <b><span id="flowheader-3">Flow 3</span></b>
             <button type="button" id="removeflow-3" style="float:right; outline: none; border: none;background-color: rgba(0,0,0,0)" onclick="removeFlow(this.id)"><i class="fas fa-times xbutton"></i></button>
-            <div style="margin-top: 1rem;">
+            <div class="marginbottom" style="margin-top: 1rem;">
                 From
                 <select id="flowFrom-3" class="form-control form-control-sm flowinput-from" onchange="updateToChoices(this.id,this.value)">
                     <option value="Screening">Screening</option>
@@ -116,22 +129,26 @@
                     <option value="Screen Failure">Screen Failure</option>
                 </select>
             </div>
-            <div>
+            <div class="marginbottom">
                 To
                 <select id="flowTo-3" class="form-control form-control-sm flowinput-to">
                     <option value="Active" selected>Active</option>
                     <option value="Early Terminated">Early Terminated</option>
                 </select>
             </div>
-            <div>
+            <div class="marginbottom">
                 # Subjects
                 <input id="flowCount-3" class="form-control form-control-sm flowinput-total" type="number" min="0" value="60">
+            </div>
+            <div>
+                Color:
+                <input id="flowColor-3" class="flowinput-color" type="color" value="#EBF5FF" style="float:right;">
             </div>
         </div>
         <div class="flow-column" id="flowcolumn-4">
             <b><span id="flowheader-4">Flow 4</span></b>
             <button type="button" id="removeflow-4" style="float:right; outline: none; border: none;background-color: rgba(0,0,0,0)" onclick="removeFlow(this.id)"><i class="fas fa-times xbutton"></i></button>
-            <div style="margin-top: 1rem;">
+            <div class="marginbottom" style="margin-top: 1rem;">
                 From
                 <select id="flowFrom-4" class="form-control form-control-sm flowinput-from" onchange="updateToChoices(this.id,this.value)">
                     <option value="Screening">Screening</option>
@@ -139,29 +156,69 @@
                     <option value="Screen Failure">Screen Failure</option>
                 </select>
             </div>
-            <div>
+            <div class="marginbottom">
                 To
                 <select id="flowTo-4" class="form-control form-control-sm flowinput-to">
                     <option value="Active">Active</option>
                     <option value="Early Terminated" selected>Early Terminated</option>
                 </select>
             </div>
-            <div>
+            <div class="marginbottom">
                 # Subjects
                 <input id="flowCount-4" class="form-control form-control-sm flowinput-total" type="number" min="0" value="20">
             </div>
+            <div>
+                Color:
+                <input id="flowColor-4" class="flowinput-color" type="color" value="#FFE5E5" style="float:right;">
+            </div>
         </div>
     </div>
-    <div class="main-section4" id="section4">
+    <div class="main-section4">
         <div class="main-section4-header">
+            <hr class="header-line">
+            <h4>Step 3. Customize Diagram</h4>
+        </div>
+        <div class="main-section4-data">
+            <div class="chartTitle">
+                Chart Title
+                <input id="chartTitle" class="form-control form-control-sm marginbottom" type="text" style="width: 100%;" value="Study Recruitment Flow">
+            </div>
+            <div class="chartTitleSize">
+                Title Font Size
+                <input id="chartTitleSize" class="form-control form-control-sm marginbottom" type="number" style="width: 100px;" value="24" min="12" max="36">
+            </div>
+            <div class="chartTitleColor">
+                Title Font Color
+                <input id="chartTitleColor" class="form-control form-control-sm marginbottom" type="color" style="width: 100px;" value="#000000">
+            </div>
+            <div class="chartLabelSize">
+                Label Font Size
+                <input id="chartLabelSize" class="form-control form-control-sm marginbottom" type="number" style="width: 100px;" value="16" min="12" max="36">
+            </div>
+            <div class="chartBgColor">
+                Chart Background Color
+                <input id="chartBgColor" class="form-control form-control-sm marginbottom" type="color" style="width: 100px;" value="#ffffff">
+            </div>
+            <div class="chartColumnWidth">
+                Column Widths
+                <input id="chartColumnWidth" class="form-control form-control-sm marginbottom" type="number" style="width: 100px;" value="20" min="5" max="40">
+            </div>
+        </div>
+    </div>
+    <div class="main-section5" id="section5">
+        <div class="main-section5-header">
             <hr class="header-line">
             <h2><b>Sankey Diagram</b></h2>
             <br>
             <button class="column-button" type="button" onclick="updateSankey()">Update Chart</btn>
+            <button class="column-button" type="button" onclick="downloadSankey()" style="margin-left: 50px;">Download Image</btn>
         </div>
         <div class="sankey-plot" id="sankeyPlot">
             
         </div>
+    </div>
+    <div class="topButton" onclick="scrollUp()">
+        <span style="color: #113294"><i class="fas fa-chevron-up"></i></span> <b>Top</b>
     </div>
 </div>
 <script type=text/javascript src="{{ url_for('static', filename='bundle.min.js') }}"></script>
@@ -172,12 +229,16 @@
     var data = [{
         type: "sankey",
         orientation: "h",
+        hoverinfo: "none",
+        textfont: {
+            size: 16,
+            color: '#FFFFFF',
+        },
         node: {
-            pad: 15,
-            thickness: 30,
+            thickness: 20,
             line: {
                 color: "black",
-                width: 0.5
+                width: 0.25,
             },
             label: ["Screening: 100", "Randomized: 80", "Screen Failure: 20", "Active: 60", "Early Terminated: 20"],
             color: ["blue", "blue", "blue", "blue", "blue"],
@@ -189,7 +250,8 @@
         link: {
             source: [0,0,1,1],
             target: [1,2,3,4],
-            value:  [80,20,60,20]
+            value:  [80,20,60,20],
+            color: ["#F2F2F2","#F2F2F2","#F2F2F2","#F2F2F2"],
         }
     }];
 
@@ -197,25 +259,29 @@
 
 
     var layout = {
-    title: "Basic Sankey",
+    title: {
+        text: "Basic Sankey",
+        font: {
+            size: 20,
+            color: '#000000',
+        },
+    },
     font: {
-        size: 10
-    }
-    }
+        family: 'Montserrat, sans-serif',
+    },
+    plot_bgcolor:"#FFFFFF",
+    paper_bgcolor:"#FFFFFF",
+    };
 
     var sankeyArray = [];
-
     var sankeyLabels = [];
-
     var sankeyX = [];
-
     var sankeyY = [];
-
     var sankeySource = [];
-    
     var sankeyTarget = [];
-
     var sankeyValue = [];
+    var sankeyColors = [];
+    var sankeyFlowColors = [];
 
     function updateSankey(){
         sankeyArray = [];
@@ -225,41 +291,41 @@
         sankeySource = [];
         sankeyTarget = [];
         sankeyValue = [];
+        sankeyColors = [];
+        sankeyFlowColors = [];
         var numberOfColumns = $('.sankey-column').length;
         $('.sankey-column').each(function(i, obj) {
             var columnId = parseInt(obj.id.split("-").pop());
             $('#columninputs-'+columnId+' input').each(function () {
-                var totalSubjects = 0;
-                var labelValue = this.value
-                if (columnId != 1){
-                    $('.flowinput-to').each(function(j, obj2){
-                        if (obj2.value == labelValue){
-                            var flowId = obj2.id.split("-").pop();
-                            var subTotalSubjects = parseInt($('#flowCount-'+flowId).val());
-                            totalSubjects += subTotalSubjects;
-                        }
-                    });
-                } else{
-                    $('.flowinput-from').each(function(j, obj2){
-                        if (obj2.value == labelValue){
-                            var flowId = obj2.id.split("-").pop();
-                            var subTotalSubjects = parseInt($('#flowCount-'+flowId).val());
-                            totalSubjects += subTotalSubjects;
-                        }
-                    });
-                }
-                var sankeySubLabel = [labelValue, columnId, totalSubjects, labelValue + ": " + String(totalSubjects)];
-                sankeyArray.push(sankeySubLabel);
+                if (!$(this).hasClass('colorinput')){
+                    var totalSubjects = 0;
+                    var labelValue = this.value
+                    if (columnId != 1){
+                        $('.flowinput-to').each(function(j, obj2){
+                            if (obj2.value == labelValue){
+                                var flowId = obj2.id.split("-").pop();
+                                var subTotalSubjects = parseInt($('#flowCount-'+flowId).val());
+                                totalSubjects += subTotalSubjects;
+                            }
+                        });
+                    } else{
+                        $('.flowinput-from').each(function(j, obj2){
+                            if (obj2.value == labelValue){
+                                var flowId = obj2.id.split("-").pop();
+                                var subTotalSubjects = parseInt($('#flowCount-'+flowId).val());
+                                totalSubjects += subTotalSubjects;
+                            }
+                        });
+                    }
+                    var color = this.nextSibling.nextSibling.value;
+                    var sankeySubLabel = [labelValue, columnId, totalSubjects, labelValue + ": " + String(totalSubjects), color];
+                    sankeyArray.push(sankeySubLabel);
+                };
             });
-        });
-        sankeyArray.sort(function(a, b) {
-            if (a[1] == b[1]) {
-                return b[2] - a[2];
-            }
-            return a[1] - b[1];
         });
         for (array of sankeyArray){
             sankeyLabels.push(array[3]);
+            sankeyColors.push(array[4]);
         }
         var sankeyLabelSteps = parseFloat(1.0 / (numberOfColumns-1));
         for (label of sankeyLabels){
@@ -310,22 +376,38 @@
                 };
                 if (sankeyArray[array][0] == toVisitName){
                     sankeyTarget.push(array);
+
                 };
+
             }
             sankeyValue.push($('#flowCount-'+flowId).val());
+            console.log(flowId + ", " + fromVisitName + ", " + toVisitName + ", " +$('#flowCount-'+flowId).val() + ", " + $('#flowColor-'+flowId).val());
+            sankeyFlowColors.push($('#flowColor-'+flowId).val());
         });
         data[0]['node']['label'] = sankeyLabels;
+        data[0]['node']['color'] = sankeyColors;
         data[0]['node']['x'] = sankeyX;
         data[0]['node']['y'] = sankeyY;
+        data[0]['node']['thickness'] = $('#chartColumnWidth').val();
+        data[0]['textfont']['size'] = $('#chartLabelSize').val();
+
         data[0]['link']['source'] = sankeySource;
         data[0]['link']['target'] = sankeyTarget;
         data[0]['link']['value'] = sankeyValue;
-        Plotly.react('sankeyPlot', data, layout)
+        data[0]['link']['color'] = sankeyFlowColors;
+        layout['title']['text'] = $('#chartTitle').val();
+        layout['title']['font']['size'] = $('#chartTitleSize').val();
+        layout['title']['font']['color'] = $('#chartTitleColor').val();
+        layout['plot_bgcolor'] = $('#chartBgColor').val();
+        layout['paper_bgcolor'] = $('#chartBgColor').val();
+        Plotly.react('sankeyPlot', data, layout, {displayModeBar: false})
     };
 
     updateSankey();
 
-
+    function downloadSankey(){
+        Plotly.downloadImage('sankeyPlot', {format: 'png',filename: 'Sankey_Diagram'});
+    };
 
     function addColumn(){
         var columnCount = String(document.getElementsByClassName('sankey-column').length+1);
@@ -335,6 +417,7 @@
                 <button type="button" id="removecolumn-`+columnCount+`" style="float:right; outline: none; border: none;background-color: rgba(0,0,0,0)" onclick="removeColumn(this.id)"><i class="fas fa-times xbutton"></i></button>
                 <div id="columninputs-`+columnCount+`" style="margin-top: 1rem;margin-bottom: 1rem;">
                     <input class="form-control form-control-sm columninput" type="text" oninput="updatedFlowChoices()">
+                    <input class="colorinput" type="color" value="#457CD3">
                 </div>
                 <button class="column-button" id="addrow-`+columnCount+`" type="button" onclick="addRow(this.id)">Add Row</btn>
                 <button class="column-button" id="removerow-`+columnCount+`" type="button" onclick="removeRow(this.id)"" style="float:right">Remove Row</btn>
@@ -344,12 +427,15 @@
     };
     function addRow(id){
         var columnId = "columninputs-"+id.split("-").pop();
-        $('#'+columnId).append('<input class="form-control form-control-sm column-input" type="text" oninput="updatedFlowChoices()">');
+        $('#'+columnId).append(`
+        <input class="form-control form-control-sm columninput" type="text" oninput="updatedFlowChoices()">
+        <input class="colorinput" type="color" value="#457CD3">`);
     };
     function removeRow(id){
         var columnId = "columninputs-"+id.split("-").pop();
         var columnIdLength = document.getElementById(columnId).getElementsByTagName('input').length;
         if (columnIdLength > 1){
+            $("[id='"+columnId+"'").children().last().remove();
             $("[id='"+columnId+"'").children().last().remove();
         };
         updatedFlowChoices();
@@ -385,11 +471,15 @@
             $('.flow-column').each(function(i, obj) {
             var flowId = parseInt(obj.id.split("-").pop());
                 if (flowId > removedFlowIdInt){
-                    var newFlowId = flowId - 1;
+                    var newFlowId = parseInt(flowId) - 1;
                     $("[id='flowheader-"+String(flowId)+"'").text('Flow '+String(newFlowId));
                     $("[id='flowheader-"+String(flowId)+"'").attr('id','flowheader-'+String(newFlowId));
                     $("[id='flowcolumn-"+String(flowId)+"'").attr('id','flowcolumn-'+String(newFlowId));
                     $("[id='removeflow-"+String(flowId)+"'").attr('id','removeflow-'+String(newFlowId));
+                    $("[id='flowFrom-"+String(flowId)+"'").attr('id','flowFrom-'+String(newFlowId));
+                    $("[id='flowTo-"+String(flowId)+"'").attr('id','flowTo-'+String(newFlowId));
+                    $("[id='flowCount-"+String(flowId)+"'").attr('id','flowCount-'+String(newFlowId));
+                    $("[id='flowColor-"+String(flowId)+"'").attr('id','flowColor-'+String(newFlowId));
                 }
             });
         }
@@ -400,21 +490,25 @@
             <div class="flow-column" id="flowcolumn-`+flowCount+`">
                 <b><span id="flowheader-`+flowCount+`">Flow `+flowCount+`</span></b>
                 <button type="button" id="removeflow-`+flowCount+`" style="float:right; outline: none; border: none;background-color: rgba(0,0,0,0)" onclick="removeFlow(this.id)"><i class="fas fa-times xbutton"></i></button>
-                <div style="margin-top: 1rem;">
+                <div class="marginbottom" style="margin-top: 1rem;">
                     From
                     <select id="flowFrom-`+flowCount+`" class="form-control form-control-sm flowinput-from" onchange="updateToChoices(this.id,this.value)">
                         `+fromChoicesText+`
                     </select>
                 </div>
-                <div>
+                <div class="marginbottom">
                     To
                     <select id="flowTo-`+flowCount+`" class="form-control form-control-sm flowinput-to">
                         `+toChoicesText+`
                     </select>
                 </div>
-                <div>
+                <div class="marginbottom">
                     # Subjects
                     <input id="flowCount-`+flowCount+`" class="form-control form-control-sm flowinput-total" type="number" min="0">
+                </div>
+                <div>
+                    Color:
+                    <input id="flowColor-`+flowCount+`" class="flowinput-color" type="color" value="#F2F2F2" style="float:right;">
                 </div>
             </div>
         `);
@@ -431,7 +525,9 @@
             var columnId = parseInt(obj.id.split("-").pop());
             if (columnId < numberOfColumns){
                 $('#columninputs-'+columnId+' input').each(function () {
-                    fromChoices.push(this.value);
+                    if (!$(this).hasClass('colorinput')){
+                        fromChoices.push(this.value);
+                    }
                 });
             }
         });
@@ -453,7 +549,7 @@
             $('.sankey-column').each(function(i, obj) {
                 var columnId = parseInt(obj.id.split("-").pop());
                 $('#columninputs-'+columnId+' input').each(function () {
-                    if (this.value == flowFromValue){
+                    if (this.value == flowFromValue && !$(this).hasClass('colorinput')){
                         fromColumn = columnId;
                     }
                 });
@@ -462,7 +558,9 @@
                 var columnId = parseInt(obj.id.split("-").pop());
                 if (columnId > fromColumn){
                     $('#columninputs-'+columnId+' input').each(function () {
-                        toChoices.push(this.value);
+                        if (!$(this).hasClass('colorinput')){
+                            toChoices.push(this.value);
+                        };
                     });
                 }
             });
@@ -476,7 +574,9 @@
             var columnId = parseInt(obj.id.split("-").pop());
             if (columnId > 1){
                 $('#columninputs-'+columnId+' input').each(function () {
-                    toChoices.push(this.value);
+                    if (!$(this).hasClass('colorinput')){
+                        toChoices.push(this.value);
+                    };
                 });
             }
         });
@@ -491,7 +591,7 @@
         $('.sankey-column').each(function(i, obj) {
             var columnId = parseInt(obj.id.split("-").pop());
             $('#columninputs-'+columnId+' input').each(function () {
-                if (this.value == value){
+                if (this.value == value && !$(this).hasClass('colorinput')){
                     fromColumn = columnId;
                 }
             });
@@ -500,7 +600,9 @@
             var columnId = parseInt(obj.id.split("-").pop());
             if (columnId > fromColumn){
                 $('#columninputs-'+columnId+' input').each(function () {
-                    toChoices.push(this.value);
+                    if (!$(this).hasClass('colorinput')){
+                        toChoices.push(this.value);
+                    };
                 });
             }
         });
@@ -510,6 +612,17 @@
             $("[id='flowTo-"+id).append('<option value="'+choice+'">'+choice+'</option>');
         };
     };
+    // Scroll to the top of dashboard on click
+    function scrollUp(){
+        var element = document.getElementById('section1');
+        var headerOffset = 77.25;
+        var elementPosition = element.getBoundingClientRect().top;
+        var offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+        });
+    };
 </script>
 {% endblock content2 %}
