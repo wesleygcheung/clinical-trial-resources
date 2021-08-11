@@ -205,7 +205,7 @@ function addRow(id){
 function removeRow(id){
     var columnId = "columninputs-"+id.split("-").pop();
     var columnIdLength = document.getElementById(columnId).getElementsByTagName('input').length;
-    if (columnIdLength > 1){
+    if (columnIdLength > 2){
         $("[id='"+columnId+"'").children().last().remove();
         $("[id='"+columnId+"'").children().last().remove();
     };
