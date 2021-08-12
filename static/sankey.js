@@ -55,123 +55,128 @@ var sankeyValue = [];
 var sankeyColors = [];
 var sankeyFlowColors = [];
 
+$("#sankeyForm").validate();
+
 function updateSankey(){
-    sankeyArray = [];
-    sankeyLabels = [];
-    sankeyX = [];
-    sankeyY = [];
-    sankeySource = [];
-    sankeyTarget = [];
-    sankeyValue = [];
-    sankeyColors = [];
-    sankeyFlowColors = [];
-    var numberOfColumns = $('.sankey-column').length;
-    $('.sankey-column').each(function(i, obj) {
-        var columnId = parseInt(obj.id.split("-").pop());
-        $('#columninputs-'+columnId+' input').each(function () {
-            if (!$(this).hasClass('colorinput')){
-                var totalSubjects = 0;
-                var labelValue = this.value
-                if (columnId != 1){
-                    $('.flowinput-to').each(function(j, obj2){
-                        if (obj2.value == labelValue){
-                            var flowId = obj2.id.split("-").pop();
-                            var subTotalSubjects = parseInt($('#flowCount-'+flowId).val());
-                            totalSubjects += subTotalSubjects;
-                        }
-                    });
-                } else{
-                    $('.flowinput-from').each(function(j, obj2){
-                        if (obj2.value == labelValue){
-                            var flowId = obj2.id.split("-").pop();
-                            var subTotalSubjects = parseInt($('#flowCount-'+flowId).val());
-                            totalSubjects += subTotalSubjects;
-                        }
-                    });
-                }
-                var color = this.nextSibling.nextSibling.value;
-                var sankeySubLabel = [labelValue, columnId, totalSubjects, labelValue + ": " + String(totalSubjects), color];
-                sankeyArray.push(sankeySubLabel);
-            };
+    if ($("#sankeyForm").valid()){
+        sankeyArray = [];
+        sankeyLabels = [];
+        sankeyX = [];
+        sankeyY = [];
+        sankeySource = [];
+        sankeyTarget = [];
+        sankeyValue = [];
+        sankeyColors = [];
+        sankeyFlowColors = [];
+        var numberOfColumns = $('.sankey-column').length;
+        $('.sankey-column').each(function(i, obj) {
+            var columnId = parseInt(obj.id.split("-").pop());
+            $('#columninputs-'+columnId+' input').each(function () {
+                if (!$(this).hasClass('colorinput')){
+                    var totalSubjects = 0;
+                    var labelValue = this.value
+                    if (columnId != 1){
+                        $('.flowinput-to').each(function(j, obj2){
+                            if (obj2.value == labelValue){
+                                var flowId = obj2.id.split("-").pop();
+                                var subTotalSubjects = parseInt($('#flowCount-'+flowId).val());
+                                totalSubjects += subTotalSubjects;
+                            }
+                        });
+                    } else{
+                        $('.flowinput-from').each(function(j, obj2){
+                            if (obj2.value == labelValue){
+                                var flowId = obj2.id.split("-").pop();
+                                var subTotalSubjects = parseInt($('#flowCount-'+flowId).val());
+                                totalSubjects += subTotalSubjects;
+                            }
+                        });
+                    }
+                    var color = document.querySelector('#'+this.id + ' ~ input.colorinput').value;
+
+                    var sankeySubLabel = [labelValue, columnId, totalSubjects, labelValue + ": " + String(totalSubjects), color];
+                    sankeyArray.push(sankeySubLabel);
+                };
+            });
         });
-    });
-    for (array of sankeyArray){
-        sankeyLabels.push(array[3]);
-        sankeyColors.push(array[4]);
-    }
-    var sankeyLabelSteps = parseFloat(1.0 / (numberOfColumns-1));
-    for (label of sankeyLabels){
         for (array of sankeyArray){
-            if (array[3] == label){
-                sankeyX.push(parseFloat(((parseFloat(array[1])-1)*sankeyLabelSteps).toFixed(2)));
+            sankeyLabels.push(array[3]);
+            sankeyColors.push(array[4]);
+        }
+        var sankeyLabelSteps = parseFloat(1.0 / (numberOfColumns-1));
+        for (label of sankeyLabels){
+            for (array of sankeyArray){
+                if (array[3] == label){
+                    sankeyX.push(parseFloat(((parseFloat(array[1])-1)*sankeyLabelSteps).toFixed(2)));
+                }
             }
         }
-    }
-    var columnTotals = [];
-    for (let column = 1; column <=numberOfColumns; column++){
-        var columnTotal = 0;
-        for (array of sankeyArray){
-            if (array[1] == column){
-                columnTotal += array[2];
-            } 
+        var columnTotals = [];
+        for (let column = 1; column <=numberOfColumns; column++){
+            var columnTotal = 0;
+            for (array of sankeyArray){
+                if (array[1] == column){
+                    columnTotal += array[2];
+                } 
+            }
+            columnTotals.push(columnTotal);
         }
-        columnTotals.push(columnTotal);
-    }
-    var maxTotalSubjects = Math.max(...columnTotals);
-    for (let column = 1; column <=numberOfColumns; column++){
-        var columnTotalSubjects = 0;
-        for (array of sankeyArray){
-            if (array[1] == column){
-                columnTotalSubjects += parseFloat(array[2]);
-            } 
-        }
-        var columnRatio = (columnTotalSubjects / maxTotalSubjects).toFixed(2);
-        var columnBlock = 0;
-        for (array of sankeyArray){
-            if (array[1] == column){
-                var itemValue = parseFloat(array[2]);
-                var itemRatio = (itemValue / columnTotalSubjects);
-                var itemPosition = parseFloat((columnRatio * itemRatio / 2).toFixed(2));
-                var itemPositionNormalized = columnBlock + itemPosition;
-                sankeyY.push(itemPositionNormalized);
-                columnBlock += parseFloat((itemRatio * columnRatio).toFixed(2));
+        var maxTotalSubjects = Math.max(...columnTotals);
+        for (let column = 1; column <=numberOfColumns; column++){
+            var columnTotalSubjects = 0;
+            for (array of sankeyArray){
+                if (array[1] == column){
+                    columnTotalSubjects += parseFloat(array[2]);
+                } 
+            }
+            var columnRatio = (columnTotalSubjects / maxTotalSubjects).toFixed(2);
+            var columnBlock = 0;
+            for (array of sankeyArray){
+                if (array[1] == column){
+                    var itemValue = parseFloat(array[2]);
+                    var itemRatio = (itemValue / columnTotalSubjects);
+                    var itemPosition = parseFloat((columnRatio * itemRatio / 2).toFixed(2));
+                    var itemPositionNormalized = columnBlock + itemPosition;
+                    sankeyY.push(itemPositionNormalized);
+                    columnBlock += parseFloat((itemRatio * columnRatio).toFixed(2));
+                }
             }
         }
-    }
-    $('.flow-column').each(function(i, obj) {
-        var flowId = obj.id.split("-").pop();
-        var fromVisitName = $('#flowFrom-'+flowId).val();
-        var toVisitName = $('#flowTo-'+flowId).val();
-        for (array in sankeyArray){
-            if (sankeyArray[array][0] == fromVisitName){
-                sankeySource.push(array);
-            };
-            if (sankeyArray[array][0] == toVisitName){
-                sankeyTarget.push(array);
+        $('.flow-column').each(function(i, obj) {
+            var flowId = obj.id.split("-").pop();
+            var fromVisitName = $('#flowFrom-'+flowId).val();
+            var toVisitName = $('#flowTo-'+flowId).val();
+            for (array in sankeyArray){
+                if (sankeyArray[array][0] == fromVisitName){
+                    sankeySource.push(array);
+                };
+                if (sankeyArray[array][0] == toVisitName){
+                    sankeyTarget.push(array);
 
-            };
+                };
 
-        }
-        sankeyValue.push($('#flowCount-'+flowId).val());
-        sankeyFlowColors.push($('#flowColor-'+flowId).val());
-    });
-    data[0]['node']['label'] = sankeyLabels;
-    data[0]['node']['color'] = sankeyColors;
-    data[0]['node']['x'] = sankeyX;
-    data[0]['node']['y'] = sankeyY;
-    data[0]['node']['thickness'] = $('#chartColumnWidth').val();
-    data[0]['textfont']['size'] = $('#chartLabelSize').val();
+            }
+            sankeyValue.push($('#flowCount-'+flowId).val());
+            sankeyFlowColors.push($('#flowColor-'+flowId).val());
+        });
+        data[0]['node']['label'] = sankeyLabels;
+        data[0]['node']['color'] = sankeyColors;
+        data[0]['node']['x'] = sankeyX;
+        data[0]['node']['y'] = sankeyY;
+        data[0]['node']['thickness'] = $('#chartColumnWidth').val();
+        data[0]['textfont']['size'] = $('#chartLabelSize').val();
 
-    data[0]['link']['source'] = sankeySource;
-    data[0]['link']['target'] = sankeyTarget;
-    data[0]['link']['value'] = sankeyValue;
-    data[0]['link']['color'] = sankeyFlowColors;
-    layout['title']['text'] = $('#chartTitle').val();
-    layout['title']['font']['size'] = $('#chartTitleSize').val();
-    layout['title']['font']['color'] = $('#chartTitleColor').val();
-    layout['plot_bgcolor'] = $('#chartBgColor').val();
-    layout['paper_bgcolor'] = $('#chartBgColor').val();
-    Plotly.react('sankeyPlot', data, layout, {displayModeBar: false})
+        data[0]['link']['source'] = sankeySource;
+        data[0]['link']['target'] = sankeyTarget;
+        data[0]['link']['value'] = sankeyValue;
+        data[0]['link']['color'] = sankeyFlowColors;
+        layout['title']['text'] = $('#chartTitle').val();
+        layout['title']['font']['size'] = $('#chartTitleSize').val();
+        layout['title']['font']['color'] = $('#chartTitleColor').val();
+        layout['plot_bgcolor'] = $('#chartBgColor').val();
+        layout['paper_bgcolor'] = $('#chartBgColor').val();
+        Plotly.react('sankeyPlot', data, layout, {displayModeBar: false})
+    };
 };
 
 updateSankey();
@@ -187,7 +192,7 @@ function addColumn(){
             <b><span id="columnheader-`+columnCount+`">Column `+columnCount+`</span></b>
             <button type="button" id="removecolumn-`+columnCount+`" style="float:right; outline: none; border: none;background-color: rgba(0,0,0,0)" onclick="removeColumn(this.id)"><i class="fas fa-times xbutton"></i></button>
             <div id="columninputs-`+columnCount+`" style="margin-top: 1rem;margin-bottom: 1rem;">
-                <input class="form-control form-control-sm columninput" type="text" oninput="updatedFlowChoices()">
+                <input class="form-control form-control-sm columninput" name="columnInput-`+columnCount+`-1" id="columnInput-`+columnCount+`-1" required type="text" oninput="updatedFlowChoices()">
                 <input class="colorinput" type="color" value="#457CD3">
             </div>
             <button class="column-button" id="addrow-`+columnCount+`" type="button" onclick="addRow(this.id)">Add Row</btn>
@@ -198,8 +203,9 @@ function addColumn(){
 };
 function addRow(id){
     var columnId = "columninputs-"+id.split("-").pop();
+    var inputCount = 1 + $('#'+columnId).children('input').length/2;
     $('#'+columnId).append(`
-    <input class="form-control form-control-sm columninput" type="text" oninput="updatedFlowChoices()">
+    <input class="form-control form-control-sm columninput" name="columnInput-`+id.split("-").pop()+`-`+inputCount+`" id="columnInput-`+id.split("-").pop()+`-`+inputCount+`" required type="text" oninput="updatedFlowChoices()">
     <input class="colorinput" type="color" value="#457CD3">`);
 };
 function removeRow(id){
@@ -208,8 +214,8 @@ function removeRow(id){
     if (columnIdLength > 2){
         $("[id='"+columnId+"'").children().last().remove();
         $("[id='"+columnId+"'").children().last().remove();
+        updatedFlowChoices();
     };
-    updatedFlowChoices();
 };
 function removeColumn(id){
     var numberOfColumns = $('.sankey-column').length;
@@ -218,7 +224,7 @@ function removeColumn(id){
         var removedColumnIdInt = parseInt(removedColumnId);
         document.getElementById("column-"+removedColumnId).remove();
         $('.sankey-column').each(function(i, obj) {
-        var columnId = parseInt(obj.id.split("-").pop());
+            var columnId = parseInt(obj.id.split("-").pop());
             if (columnId > removedColumnIdInt){
                 var newColumnId = columnId - 1;
                 $("[id='columnheader-"+String(columnId)+"'").text('Column '+String(newColumnId));
@@ -228,6 +234,17 @@ function removeColumn(id){
                 $("[id='columninputs-"+String(columnId)+"'").attr('id','columninputs-'+String(newColumnId));
                 $("[id='addrow-"+String(columnId)+"'").attr('id','addrow-'+String(newColumnId));
                 $("[id='removerow-"+String(columnId)+"'").attr('id','removerow-'+String(newColumnId));
+
+            }
+        });
+        $('.sankey-column div .columninput').each(function(i, obj) {
+            var columnId = this.id.split("-")[1];
+            var rowId = this.id.split("-")[2];
+            if (columnId > removedColumnIdInt){
+                var newColumnId = String(parseInt(columnId) - 1);
+                $("[id='columnInput-"+columnId+"-"+rowId+"'").attr('name','columnInput-'+newColumnId+'-'+rowId);
+                $("[id='columnInput-"+columnId+"-"+rowId+"'").attr('id','columnInput-'+newColumnId+'-'+rowId);
+                
             }
         });
     };
@@ -302,16 +319,25 @@ function updatedFlowChoices(){
             });
         }
     });
-    var flowFromDropdowns = document.getElementsByClassName("flowinput-from");
-    for (flow of flowFromDropdowns){
-        flow.options.length = 0;
-    }
+    $('.flowinput-from').each(function(i, obj) {
+        var fromSelection = obj.value;
+
+        obj.options.length = 0;
+        for (choice of fromChoices){
+            if (choice == fromSelection){
+                $(obj).append('<option value="'+choice+'" selected>'+choice+'</option>');
+                
+            } else{
+                $(obj).append('<option value="'+choice+'">'+choice+'</option>');
+            };
+        }
+    });
     for (choice of fromChoices){
-        $(".flowinput-from").append('<option value="'+choice+'">'+choice+'</option>');
         fromChoicesText = fromChoicesText.concat('<option value="'+choice+'">'+choice+'</option>');
-    }
+    };
 
     $('.flowinput-to').each(function(i, obj) {
+        var toSelection = obj.value;
         obj.options.length = 0;
         var toChoices = [];
         var flowId = obj.id.split("-").pop();
@@ -336,7 +362,11 @@ function updatedFlowChoices(){
             }
         });
         for (choice of toChoices){
-            $(obj).append('<option value="'+choice+'">'+choice+'</option>');
+            if (choice == toSelection){
+                $(obj).append('<option value="'+choice+'" selected>'+choice+'</option>');
+            } else{
+                $(obj).append('<option value="'+choice+'">'+choice+'</option>');
+            };
         };
     });
     var toChoices = [];
@@ -395,3 +425,13 @@ function scrollUp(){
         behavior: "smooth"
     });
 };
+
+$('.main-section2').on('change','.columninput',function(event){
+    var $current = $(this);
+    $('input[id^="columnInput"]').each(function() {
+        if ($(this).val() == $current.val() && $(this).attr('id') != $current.attr('id') && $(this).val() != ''){
+            alert('Please change duplicate entry "'+$(this).val()+'"');
+            $current.val('');
+        }
+    });
+});

@@ -38,6 +38,7 @@ button:focus {
     text-align: left;
     z-index: 3;
     font-weight: 400;
+    width: 80%;
 }
 .header-text{
     line-height: 2rem;
@@ -105,9 +106,10 @@ button:focus {
         z-index: 3;
         font-weight: 600;
         padding: 2rem;
+        width: 100%;
     }
     .header-text{
-        line-height: 1rem;
+        line-height: 1.1rem;
     }
     .home-h1{
         font-size: 30px;

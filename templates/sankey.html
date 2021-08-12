@@ -2,9 +2,11 @@
 {% block header %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='sankey.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.js" integrity="sha512-tb1Ro9mw6+HBl4AzCtyFn4G9B/TJFDfGpil98I4zDUrACJ1e1XCD6o06i3jxTVaiP0PsYGkEkLbDkCkz3p77+Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 {% endblock header %}    
 {% block content2 %}
+<form id="sankeyForm">
 <div class="main-grid">
     <div class="main-section1" id="section1">
         <hr class="header-line">
@@ -22,7 +24,7 @@
             <b><span id="columnheader-1">Column 1</span></b>
             <button type="button" id="removecolumn-1" style="float:right; outline: none; border: none;background-color: rgba(0,0,0,0)" onclick="removeColumn(this.id)"><i class="fas fa-times xbutton"></i></button>
             <div id="columninputs-1" style="margin-top: 1rem;margin-bottom: 1rem;">
-                <input class="form-control form-control-sm columninput" type="text" value="Screening" oninput="updatedFlowChoices()">
+                <input class="form-control form-control-sm columninput" name="columnInput-1-1" id="columnInput-1-1" type="text" required value="Screening" oninput="updatedFlowChoices()">
                 <input class="colorinput" type="color" value="#457CD3">
             </div>
             <button class="column-button" id="addrow-1" type="button" onclick="addRow(this.id)">Add Row</btn>
@@ -32,9 +34,9 @@
             <b><span id="columnheader-2">Column 2</span></b>
             <button type="button" id="removecolumn-2" style="float:right; outline: none; border: none;background-color: rgba(0,0,0,0)" onclick="removeColumn(this.id)"><i class="fas fa-times xbutton"></i></button>
             <div id="columninputs-2" style="margin-top: 1rem;margin-bottom: 1rem;">
-                <input class="form-control form-control-sm columninput" type="text" value="Randomized" oninput="updatedFlowChoices()">
+                <input class="form-control form-control-sm columninput" name="columnInput-2-1" id="columnInput-2-1" type="text" required value="Randomized" oninput="updatedFlowChoices()">
                 <input class="colorinput" type="color" value="#2E846C">
-                <input class="form-control form-control-sm columninput" type="text" value="Screen Failure" oninput="updatedFlowChoices()">
+                <input class="form-control form-control-sm columninput" name="columnInput-2-2" id="columnInput-2-2" type="text" required value="Screen Failure" oninput="updatedFlowChoices()">
                 <input class="colorinput" type="color" value="#D91212">
             </div>
             <button class="column-button" id="addrow-2" type="button" onclick="addRow(this.id)">Add Row</btn>
@@ -44,9 +46,9 @@
             <b><span id="columnheader-3">Column 3</span></b>
             <button type="button" id="removecolumn-3" style="float:right; outline: none; border: none;background-color: rgba(0,0,0,0)" onclick="removeColumn(this.id)"><i class="fas fa-times xbutton"></i></button>
             <div id="columninputs-3" style="margin-top: 1rem;margin-bottom: 1rem;">
-                <input class="form-control form-control-sm columninput" type="text" value="Active" oninput="updatedFlowChoices()">
+                <input class="form-control form-control-sm columninput" name="columnInput-3-1" id="columnInput-3-1" type="text" required value="Active" oninput="updatedFlowChoices()">
                 <input class="colorinput" type="color" value="#A68CEE">
-                <input class="form-control form-control-sm columninput" type="text" value="Early Terminated" oninput="updatedFlowChoices()">
+                <input class="form-control form-control-sm columninput" name="columnInput-3-2" id="columnInput-3-2" type="text" required value="Early Terminated" oninput="updatedFlowChoices()">
                 <input class="colorinput" type="color" value="#FF7033">
             </div>
             <button class="column-button" id="addrow-3" type="button" onclick="addRow(this.id)">Add Row</btn>
@@ -82,7 +84,7 @@
             </div>
             <div class="marginbottom">
                 # Subjects
-                <input id="flowCount-1" class="form-control form-control-sm flowinput-total" type="number" min="0" value="80">
+                <input id="flowCount-1" class="form-control form-control-sm flowinput-total" type="number" min="1" value="80">
             </div>
             <div>
                 Color:
@@ -111,7 +113,7 @@
             </div>
             <div class="marginbottom">
                 # Subjects
-                <input id="flowCount-2" class="form-control form-control-sm flowinput-total" type="number" min="0" value="20">
+                <input id="flowCount-2" class="form-control form-control-sm flowinput-total" type="number" min="1" value="20">
             </div>
             <div>
                 Color:
@@ -138,7 +140,7 @@
             </div>
             <div class="marginbottom">
                 # Subjects
-                <input id="flowCount-3" class="form-control form-control-sm flowinput-total" type="number" min="0" value="60">
+                <input id="flowCount-3" class="form-control form-control-sm flowinput-total" type="number" min="1" value="60">
             </div>
             <div>
                 Color:
@@ -165,7 +167,7 @@
             </div>
             <div class="marginbottom">
                 # Subjects
-                <input id="flowCount-4" class="form-control form-control-sm flowinput-total" type="number" min="0" value="20">
+                <input id="flowCount-4" class="form-control form-control-sm flowinput-total" type="number" min="1" value="20">
             </div>
             <div>
                 Color:
@@ -181,27 +183,27 @@
         <div class="main-section4-data">
             <div class="chartTitle">
                 Chart Title
-                <input id="chartTitle" class="form-control form-control-sm marginbottom" type="text" style="width: 100%;" value="Study Recruitment Flow">
+                <input id="chartTitle" name="chartTitle" class="form-control form-control-sm marginbottom" type="text" style="width: 100%;" value="Study Recruitment Flow">
             </div>
             <div class="chartTitleSize">
                 Title Font Size
-                <input id="chartTitleSize" class="form-control form-control-sm marginbottom" type="number" style="width: 100px;" value="24" min="12" max="36">
+                <input id="chartTitleSize" name="chartTitleSize" class="form-control form-control-sm marginbottom" type="number" style="width: 100px;" required value="24" min="12" max="36">
             </div>
             <div class="chartTitleColor">
                 Title Font Color
-                <input id="chartTitleColor" class="form-control form-control-sm marginbottom" type="color" style="width: 100px;" value="#000000">
+                <input id="chartTitleColor" name="chartTitleColor" class="form-control form-control-sm marginbottom" type="color" style="width: 100px;" value="#000000">
             </div>
             <div class="chartLabelSize">
                 Label Font Size
-                <input id="chartLabelSize" class="form-control form-control-sm marginbottom" type="number" style="width: 100px;" value="16" min="12" max="36">
+                <input id="chartLabelSize" name="chartLabelSize" class="form-control form-control-sm marginbottom" type="number" style="width: 100px;" required value="16" min="12" max="36">
             </div>
             <div class="chartBgColor">
                 Chart Background Color
-                <input id="chartBgColor" class="form-control form-control-sm marginbottom" type="color" style="width: 100px;" value="#ffffff">
+                <input id="chartBgColor" name="chartBgColor" class="form-control form-control-sm marginbottom" type="color" style="width: 100px;" value="#ffffff">
             </div>
             <div class="chartColumnWidth">
                 Column Widths
-                <input id="chartColumnWidth" class="form-control form-control-sm marginbottom" type="number" style="width: 100px;" value="20" min="5" max="40">
+                <input id="chartColumnWidth" name="chartColumnWidth" class="form-control form-control-sm marginbottom" type="number" style="width: 100px;" required value="20" min="5" max="40">
             </div>
         </div>
     </div>
@@ -221,6 +223,7 @@
         <span style="color: #113294"><i class="fas fa-chevron-up"></i></span> <b>Top</b>
     </div>
 </div>
+</form>
 <script type=text/javascript src="{{ url_for('static', filename='bundle.min.js') }}"></script>
 <script type=text/javascript>
     $SCRIPT_ROOT = {{ request.script_root|tojson }};

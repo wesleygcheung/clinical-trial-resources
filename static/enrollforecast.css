@@ -493,7 +493,6 @@ button:focus {
     }
     .error {
         color: rgb(184, 0, 0);
-        font-weight: bold;
      }
     .hidden{
         display: none;

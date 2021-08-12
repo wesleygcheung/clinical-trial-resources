@@ -160,10 +160,10 @@ function downloadCSV(){
 // Initialize jQuery form validation
 $("#enrollform").validate();
 function minCurrentEnroll(targetEnrollment){
-if ($('#currentenrollment').val() > targetEnrollment){
-    $('#currentenrollment').val("");
-}
-$('#currentenrollment').attr("max", targetEnrollment);
+    if ($('#currentenrollment').val() > targetEnrollment){
+        $('#currentenrollment').val("");
+    }
+    $('#currentenrollment').attr("max", targetEnrollment);
 };
 
 // On submit check jQuery form validation and process table data into JSON
