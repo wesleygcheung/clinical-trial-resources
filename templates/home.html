@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
 {% block header %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='home.css') }}">
-    
 {% endblock header %}    
 {% block content2 %}
 <div class="main-grid">
@@ -9,11 +8,12 @@
 
     </div>
     <div class="main-section1-text">
-        <h1 class="home-h1"><b>Clinical Trial Resources</b></h1><br>
+        <h1 class="home-h1"><b>Clinical Trial Resources</b></h1>
         <p class="header-text">
             A suite of free, open-source clinical trial management tools.
-            Automated solutions that enable faster analysis and proactive data-driven decision making for the modern clinical research professional.
+            Enabling faster analysis to drive proactive, data-driven decision making for the modern clinical research professional.
         </p>
+        <button class="home-button type="button" onclick="scrollUp()">Get Started</button>
     </div>
     <div class="main-section2" id="projects">
         <div class="main-section2-header">
@@ -22,16 +22,29 @@
         </div>
         <div class="main-section2-projects">
             <a href="{{ url_for('enrollment') }}">
-                <div class="project" style="margin-bottom: 1rem;">
-                    <h3 class="home-h3">Enrollment Forecasting</h3>
+                <div class="project">
+                    <h3 class="home-h3">Clinical Trial Enrollment Forecasting</h3>
                 </div>
             </a>
             <a href="{{ url_for('sankey') }}">
                 <div class="project">
-                    <h3 class="home-h3">Study Visit Visualization</h3>
+                    <h3 class="home-h3">Study Visit Flow Visualization</h3>
                 </div>
             </a>
         </div>
     </div>
 </div>
+<script>
+    function scrollUp(){
+    var element = document.getElementById('projects');
+    var headerOffset = 77.25;
+    var elementPosition = element.getBoundingClientRect().top;
+    var offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+    window.scrollTo({
+         top: offsetPosition,
+         behavior: "smooth"
+    });
+};
+</script>
 {% endblock content2 %}

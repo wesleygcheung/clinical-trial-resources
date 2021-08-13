@@ -31,6 +31,7 @@ var data = [{
 
 
 var layout = {
+autosize: true,
 title: {
     text: "Basic Sankey",
     font: {
@@ -43,7 +44,13 @@ font: {
 },
 plot_bgcolor:"#FFFFFF",
 paper_bgcolor:"#FFFFFF",
-};
+margin: {
+    r: 15,
+    l: 5,
+    t: 50,
+    b: 5,
+    pad: 0,	
+},};
 
 var sankeyArray = [];
 var sankeyLabels = [];

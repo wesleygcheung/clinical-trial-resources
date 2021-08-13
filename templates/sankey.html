@@ -11,7 +11,10 @@
     <div class="main-section1" id="section1">
         <hr class="header-line">
         <h2><b>Study Visit Flow Visualization</b></h2><br>
- 
+        Sankey diagrams are a great way to visualize the flow of clinical trial subjects from visit to visit. 
+        Clinical trial schemas often branch into different arms or phases and a Sankey diagram can help visualize where trial subjects end up as they branch off into different visits or statuses.
+        <br><br>This Study Visit Flow Visualization tool helps quickly and easily generate a custom Sankey diagram without needing to code.
+        Follow the steps below to get started and compare the default example entries with the Sankey diagram below to see how they relate.
     </div>
     <div class="main-section2">
         <div class="main-section2-header">
@@ -61,7 +64,7 @@
             <h4>Step 2. Create Flows of Subjects Between Study Visits</h4>
             <br>
             <button class="section-button" type="button" onclick="addFlow()">Add Flow</btn>
-        </div><br>
+        </div>
         <div class="flow-column" id="flowcolumn-1">
             <b><span id="flowheader-1">Flow 1</span></b>
             <button type="button" id="removeflow-1" style="float:right; outline: none; border: none;background-color: rgba(0,0,0,0)" onclick="removeFlow(this.id)"><i class="fas fa-times xbutton"></i></button>

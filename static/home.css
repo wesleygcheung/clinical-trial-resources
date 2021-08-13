@@ -29,6 +29,9 @@ button:focus {
     font-size: 50px;
     color: var(--header-line-color);
 }
+.home-h3{
+    color: #000000;
+}
 .main-section1-text{
     grid-column: 3 / 7;
     grid-row: 1 / 1;
@@ -42,6 +45,21 @@ button:focus {
 }
 .header-text{
     line-height: 2rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+.home-button{
+    background-color: var(--button-color);
+    border-radius: 5px;
+    border: none;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0.50em;
+    outline: none;
+}
+.home-button:hover{
+    background-color: var(--button-color-hover);
 }
 .main-section2{
     grid-column: 1 / 11;
@@ -66,13 +84,22 @@ button:focus {
     grid-column: 3 / 9;
     grid-row: 2 / 2;
     justify-self: center;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-auto-flow: row;
+    row-gap: 2rem;
 }
 .project{
+    grid-column: 1 / 2;
+    grid-row: auto;
+    width: 1fr;
     border-style: none;
     border-radius: 20px;
     box-shadow: 3px 3px 8px #adadad;
     padding: 1.5rem;
     transition: transform ease 250ms;
+    text-align: center;
 }
 .project:hover{
     transform: scale(1.03);
@@ -92,8 +119,8 @@ button:focus {
         grid-row: 1 / 1;
         height: 50vh;
         background-image: url('/static/images/home.png');
-        background-position: 61% 50%;
-        background-size: cover;
+        background-position: 60% 0%;
+        background-size: 250%;
         z-index: 1;
     }
     .main-section1-text{
@@ -137,8 +164,8 @@ button:focus {
         grid-column: 1 / 11;
         grid-row: 2 / 2;
         min-height: none;
-        padding-top: 2rem;
-        padding-bottom: 2rem;
+        padding-top: 4rem;
+        padding-bottom: 4rem;
         display: grid;
         grid-template-columns: repeat(10, 1fr);
         grid-template-rows: auto;
